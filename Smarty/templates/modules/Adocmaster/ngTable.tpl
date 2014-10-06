@@ -349,7 +349,7 @@ $smarty = new vtigerCRM_Smarty;
 
     };
    $scope.addAdocdetail2 = function(quantity2) {
-       
+       //$scope.tableParams.reload();
        $http.get('index.php?'+kURL+'&kaction=adding&record='+record+'&quantity='+document.getElementById('quantity2').value+'&adocpd='+document.getElementById('adoc_product2_display').value+'&adocp='+document.getElementById('adoc_product2').value).
                     success(function(data, status) {
        
