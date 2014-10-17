@@ -14,36 +14,19 @@
 * at <http://corebos.org/documentation/doku.php?id=en:devel:vpl11>
 *************************************************************************************************/
 
-class UserSendEmailToSender extends cbupdaterWorker {
+class solve_dt extends cbupdaterWorker {
 	
 	function applyChange() {
-		global $adb;
 		if ($this->hasError()) $this->sendError();
 		if ($this->isApplied()) {
 			$this->sendMsg('Changeset '.get_class($this).' already applied!');
 		} else {
-			$moduleInstance = Vtiger_Module::getInstance('Users');
-			$block = Vtiger_Block::getInstance('LBL_MORE_INFORMATION', $moduleInstance);
-			$field = Vtiger_Field::getInstance('send_email_to_sender',$moduleInstance);
-			if ($field) {
-				$this->ExecuteQuery('update vtiger_field set presence=2 where fieldid='.$field->id);
-			} else {
-				$user_field = new Vtiger_Field();
-				$user_field->name = 'send_email_to_sender';
-				$user_field->label = 'LBL_SEND_EMAIL_TO_SENDER';
-				$user_field->table ='vtiger_users';
-				$user_field->column = 'send_email_to_sender';
-				$user_field->columntype = 'varchar(3)';
-				$user_field->typeofdata = 'C~O';
-				$user_field->uitype = '56';
-				$user_field->masseditable = '0';
-				$block->addField($user_field);
-				$this->ExecuteQuery("update vtiger_users set send_email_to_sender='1'");
-				RecalculateSharingRules();
-			}
+			$this->ExecuteQuery("update `vtiger_field` SET typeofdata='DT~O' WHERE `fieldname` LIKE '%time%' and tablename = 'vtiger_crmentity'");
+
 			$this->sendMsg('Changeset '.get_class($this).' applied!');
 			$this->markApplied();
 		}
 		$this->finishExecution();
 	}
+	
 }
