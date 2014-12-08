@@ -450,7 +450,7 @@ catch(Exception $e){
 
   function getGoogleCalEventfromcron($event_id,$cal) {
         set_include_path($this->root_directory. "modules/Calendar4You/");
-        try {
+              try {
             $event = $this->gService->events->get($cal,$event_id);
         } catch (Exception $e) {
             echo 'Caught exception: ',  $e->getMessage(), "\n";
