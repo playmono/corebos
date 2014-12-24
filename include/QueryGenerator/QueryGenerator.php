@@ -620,6 +620,8 @@ class QueryGenerator {
 			}
 			return $sql;
 		}
+		$yes = strtolower(getTranslatedString('yes'));
+		$no = strtolower(getTranslatedString('no'));
 		foreach ($valueArray as $value) {
 			if(!$this->isStringType($field->getFieldDataType())) {
 				$value = trim($value);
@@ -635,9 +637,9 @@ class QueryGenerator {
 				continue;
 			} elseif($field->getFieldDataType() == 'boolean') {
 				$value = strtolower($value);
-				if ($value == 'yes') {
+				if ($value == 'yes' or $value == $yes) {
 					$value = 1;
-				} elseif($value == 'no') {
+				} elseif($value == 'no' or $value == $no) {
 					$value = 0;
 				}
 			} elseif($this->isDateType($field->getFieldDataType())) {
@@ -646,6 +648,31 @@ class QueryGenerator {
 					$sql[] = 'IS NULL or '.$field->getTableName().'.'.$field->getFieldName()." = ''";
 					return $sql;
 				}
+			} elseif($field->getFieldDataType()=='picklist') {
+				global $mod_strings;
+				$values = array();
+				$strings = explode(',' , $value);
+				foreach($strings as $string) {
+					$new_value = $string;
+					// Get all the keys for the for the Picklist value
+					$mod_keys = array_keys($mod_strings, $string);
+					if (count($mod_keys)==0) {
+						$mod_keys = array_keys($mod_strings, ucfirst($string));
+						if (count($mod_keys)==0) {
+							$mod_keys = array_keys($mod_strings, ucwords($string));
+						}
+					}
+					// Iterate on the keys, to get the first key which doesn't start with LBL_  (assuming it is not used in PickList)
+					foreach($mod_keys as $mod_idx=>$mod_key) {
+						$stridx = strpos($mod_key, 'LBL_');
+						if ($stridx !== 0) {
+							$new_value = $mod_key;
+							break;
+						}
+					}
+					$values[] = $new_value;
+				}
+				$value = implode(',', $values);
 			}
 
 			if($field->getFieldName() == 'birthday' && !$this->isRelativeSearchOperators(
