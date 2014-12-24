@@ -1508,10 +1508,11 @@ class CRMEntity {
 														'last_name' => 'vtiger_users.last_name'), 'Users');
 		$query = "select case when (vtiger_users.user_name not like '') then $userNameSql else vtiger_groups.groupname end as user_name," .
 				"'Documents' ActivityType,vtiger_attachments.type  FileType,crm2.modifiedtime lastmodified,vtiger_crmentity.modifiedtime,
-				vtiger_seattachmentsrel.attachmentsid attachmentsid, vtiger_notes.notesid crmid,
+				vtiger_seattachmentsrel.attachmentsid attachmentsid, vtiger_crmentity.smownerid smownerid, vtiger_notes.notesid crmid,
 				vtiger_notes.notecontent description,vtiger_notes.*
 				from vtiger_notes
 				inner join vtiger_senotesrel on vtiger_senotesrel.notesid= vtiger_notes.notesid
+				left join vtiger_notescf ON vtiger_notescf.notesid= vtiger_notes.notesid
 				inner join vtiger_crmentity on vtiger_crmentity.crmid= vtiger_notes.notesid and vtiger_crmentity.deleted=0
 				inner join vtiger_crmentity crm2 on crm2.crmid=vtiger_senotesrel.crmid
 				LEFT JOIN vtiger_groups
@@ -1814,11 +1815,16 @@ class CRMEntity {
 		$numOfFields = $this->db->num_rows($dependentFieldSql);
 
 		if ($numOfFields > 0) {
-			$dependentColumn = $this->db->query_result($dependentFieldSql, 0, 'columnname');
-			$dependentField = $this->db->query_result($dependentFieldSql, 0, 'fieldname');
+			$relconds = array();
+			while ($depflds = $this->db->fetch_array($dependentFieldSql)) {
 
+			$dependentColumn = $depflds['columnname'];
+			$dependentField = $depflds['fieldname'];
+			$relconds[] = "$this->table_name.$this->table_index = $other->table_name.$dependentColumn";
 			$button .= '<input type="hidden" name="' . $dependentColumn . '" id="' . $dependentColumn . '" value="' . $id . '">';
 			$button .= '<input type="hidden" name="' . $dependentColumn . '_type" id="' . $dependentColumn . '_type" value="' . $currentModule . '">';
+			}
+			$relationconditions = '('.implode(' or ', $relconds).')';
 			if ($actions) {
 				if (is_string($actions))
 					$actions = explode(',', strtoupper($actions));
@@ -1852,7 +1858,7 @@ class CRMEntity {
 
 			$query .= " FROM $other->table_name";
 			$query .= " INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = $other->table_name.$other->table_index";
-			$query .= " INNER  JOIN $this->table_name   ON $this->table_name.$this->table_index = $other->table_name.$dependentColumn";
+			$query .= " INNER  JOIN $this->table_name   ON $relationconditions";
 			$query .= $more_relation;
 			$query .= " LEFT  JOIN vtiger_users        ON vtiger_users.id = vtiger_crmentity.smownerid";
 			$query .= " LEFT  JOIN vtiger_groups       ON vtiger_groups.groupid = vtiger_crmentity.smownerid";
@@ -1898,6 +1904,8 @@ class CRMEntity {
 				$parmodule = $adb->query_result($parentRecords, $i, 'module');
 				$adb->pquery("UPDATE vtiger_crmentityrel SET relcrmid=? WHERE crmid=? AND module=? AND relcrmid=? AND relmodule=?", array($entityId, $parcrmid, $parmodule, $transferId, $module));
 			}
+			$adb->pquery("UPDATE vtiger_modcomments SET related_to = ? WHERE related_to = ?", array($entityId, $transferId));
+			$adb->pquery("UPDATE vtiger_senotesrel SET crmid = ? WHERE crmid = ?", array($entityId, $transferId));
 		}
 		$log->debug("Exiting transferRelatedRecords...");
 	}

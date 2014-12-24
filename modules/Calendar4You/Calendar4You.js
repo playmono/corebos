@@ -489,7 +489,7 @@ function controlGoogleSync(){
                     	'index.php',
                     	{queue: {position: 'end', scope: 'command'},
                             	method: 'post',
-	                        postBody: 'module=Calendar4You&action=Calendar4YouAjax&file=GoogleSync4YouControl&ajax=true&login='+google_login_val+'&apikey='+google_apikey_val+'&keyfile='+google_keyfile_val+'&clientid='+google_keyfile_val,                            	onComplete: function(response) {
+	                        postBody: 'module=Calendar4You&action=Calendar4YouAjax&file=GoogleSync4YouControl&ajax=true&login='+google_login_val+'&apikey='+google_apikey_val+'&keyfile='+google_keyfile_val+'&clientid='+google_clientid_val,                            	onComplete: function(response) {
                             
                             result = JSON.parse(response.responseText);
 

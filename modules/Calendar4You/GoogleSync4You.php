@@ -75,7 +75,8 @@ class GoogleSync4You {
 		return false;
 	}
     
-   public function setAccessData($userid, $login, $apikey,$clientid,$keyfile){
+
+   public function setAccessData($userid, $login, $apikey,$keyfile,$clientid){
 
             $this->user_id = $userid;
             $this->user_login = $login;
