@@ -48,7 +48,9 @@
 			{if count($fldlabel.options) eq 1}
 				{assign var="use_parentmodule" value=$fldlabel.options.0}
 				<input type='hidden' class='small' name="{$fldname}_type" value="{$use_parentmodule}">
+				{assign var=vtui10func value=$use_parentmodule|getvtlib_open_popup_window_function:$fldname:$MODULE}
 			{else}
+			{assign var=vtui10func value="vtlib_open_popup_window"}
 			<br>
 			{if $fromlink eq 'qcreate'}
 			<select id="{$fldname}_type" class="small" name="{$fldname}_type" onChange='document.QcEditView.{$fldname}_display.value=""; document.QcEditView.{$fldname}.value="";'>
@@ -70,13 +72,8 @@
 			<td width="30%" align=left class="dvtCellInfo">
 				<input id="{$fldname}" name="{$fldname}" type="hidden" value="{$fldvalue.entityid}" id="{$fldname}">
 				<input id="{$fldname}_display" name="{$fldname}_display" id="edit_{$fldname}_display" readonly type="text" style="border:1px solid #bababa;" value="{$fldvalue.displayvalue}">&nbsp;
-				{if $fromlink eq 'qcreate'}
 				<img src="{'select.gif'|@vtiger_imageurl:$THEME}" tabindex="{$vt_tab}"
-alt="Select" title="Select" LANGUAGE=javascript  onclick='return window.open("index.php?module="+ document.QcEditView.{$fldname}_type.value +"&action=Popup&html=Popup_picker&form=vtlibPopupView&forfield={$fldname}&srcmodule={$MODULE}&forrecord={$ID}","test","width=640,height=602,resizable=0,scrollbars=0,top=150,left=200");' align="absmiddle" style='cursor:hand;cursor:pointer'>&nbsp;
-				{else}
-				<img src="{'select.gif'|@vtiger_imageurl:$THEME}" tabindex="{$vt_tab}"
-alt="Select" title="Select" LANGUAGE=javascript  onclick='return window.open("index.php?module="+ document.EditView.{$fldname}_type.value +"&action=Popup&html=Popup_picker&form=vtlibPopupView&forfield={$fldname}&srcmodule={$MODULE}&forrecord={$ID}","test","width=640,height=602,resizable=0,scrollbars=0,top=150,left=200");' align="absmiddle" style='cursor:hand;cursor:pointer'>&nbsp;
-				{/if}
+alt="Select" title="Select" LANGUAGE=javascript  onclick='return {$vtui10func}("{$fromlink}","{$fldname}","{$MODULE}","{$ID}");' align="absmiddle" style='cursor:hand;cursor:pointer'>&nbsp;
 				<input type="image" src="{'clear_field.gif'|@vtiger_imageurl:$THEME}"
 alt="Clear" title="Clear" LANGUAGE=javascript	onClick="this.form.{$fldname}.value=''; this.form.{$fldname}_display.value=''; return false;" align="absmiddle" style='cursor:hand;cursor:pointer'>&nbsp;
 			</td>
@@ -116,7 +113,7 @@ alt="Clear" title="Clear" LANGUAGE=javascript	onClick="this.form.{$fldname}.valu
 					<font color="red">{$mandatory_field}</font>
 				{$usefldlabel} {if $MASS_EDIT eq '1'}<input type="checkbox" name="{$fldname}_mass_edit_check" id="{$fldname}_mass_edit_check" class="small" >{/if}
 			</td>
-			<td colspan=3>
+			<td colspan=3 class="dvtCellInfo">
 				<textarea class="detailedViewTextBox" tabindex="{$vt_tab}" onFocus="this.className='detailedViewTextBoxOn'" name="{$fldname}"  onBlur="this.className='detailedViewTextBox'" cols="90" rows="8">{$fldvalue}</textarea>
 				{if $fldlabel eq $MOD.Solution}
 				<input type = "hidden" name="helpdesk_solution" value = '{$fldvalue}'>
@@ -137,25 +134,21 @@ alt="Clear" title="Clear" LANGUAGE=javascript	onClick="this.form.{$fldname}.valu
 			</td>
 			<td width="30%" align=left class="dvtCellInfo">
 				{if $MODULE eq 'Calendar'}
-			   		<select name="{$fldname}" tabindex="{$vt_tab}" class="small" style="width:160px;">
+					<select name="{$fldname}" tabindex="{$vt_tab}" class="small" style="width:160px;">
 				{else}
-			   		<select name="{$fldname}" tabindex="{$vt_tab}" class="small">
-			   	{/if}
+					<select name="{$fldname}" tabindex="{$vt_tab}" class="small" style="width:280px;">
+				{/if}
 				{foreach item=arr from=$fldvalue}
 					{if $arr[0] eq $APP.LBL_NOT_ACCESSIBLE}
-					<option value="{$arr[0]}" {$arr[2]}>
-						{$arr[0]}
-					</option>
+					<option value="{$arr[0]}" {$arr[2]}>{$arr[0]}</option>
 					{else}
-					<option value="{$arr[1]}" {$arr[2]}>
-                                                {$arr[0]}
-                                        </option>
+					<option value="{$arr[1]}" {$arr[2]}>{$arr[0]}</option>
 					{/if}
 				{foreachelse}
 					<option value=""></option>
 					<option value="" style='color: #777777' disabled>{$APP.LBL_NONE}</option>
 				{/foreach}
-			   </select>
+				</select>
 			</td>
 		{elseif $uitype eq 33}
 			<td width="20%" class="dvtCellLabel" align=right>

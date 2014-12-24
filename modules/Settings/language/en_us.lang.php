@@ -1283,6 +1283,7 @@ $mod_strings = Array(
 'LBL_VTABLE'=>'Table:',
 'LBL_COL_NAME'=>'Field name:'
 // language translation strings
-
+'SendEmailFrom' => 'Send Email From',
+'LeaveEmptyForUserEmail' => 'Leave empty to use your user email',
 );
 ?>
