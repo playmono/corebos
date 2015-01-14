@@ -1,0 +1,270 @@
+html, body{
+    height: 80%;
+    position: fixed;
+}
+#content{
+    width: 80%;
+    height: 100%;
+    margin: 0px;
+    margin-right: 10%;
+    margin-left: 10%;
+    padding: 2px;
+    text-align: center;
+}
+#rightButton{
+    width: 7%;
+    float: right;
+    background-color: #fff;
+    /*border: 1px solid blue;*/
+}
+#leftButton{
+    width: 7%;
+    float: left;
+    background-color: #fff;
+    /*border: 1px solid blue;*/
+}
+#rightButton input,#leftButton input{
+    width: 7%;
+    height: 100%;
+    position:absolute;
+    font-size: 20px;
+    font-weight: bold;
+    border: none;
+    background-color: #fff;
+    color: #999 !important;
+}
+#rightButton input:hover ,#leftButton input:hover{
+   background-color: #f1f1f1;
+}
+#footer{
+    position: fixed;
+    top: auto;
+    width: 100%;
+    height: 55px;
+    bottom: 0 !important;
+    bottom: -1px;
+    border-top: 1px solid #b1b1b1;
+    background-color: #f1f1f1;
+    background-image: -webkit-linear-gradient( rgba(242, 242, 242, 0.9), rgba(222, 222, 222, 0.9));
+}
+
+#footerCenter{
+    /*border: 1px solid red !important;*/
+    height: 50px;
+    margin-right: 30%;
+    margin-left: 30%;
+    text-align: center;
+}
+#footerCenter a{
+    background-image: url('../images/bgLink.png');
+    background-repeat: no-repeat;
+    width: 80px;
+    height: 9px;
+    /*border: 1px solid red;*/
+    display: inline-block;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-top: 10px;
+    color: #7F7F7F;
+    font-size: 0.9em;
+    font-weight: bold;
+    text-decoration: none;
+}
+#footerCenter a:hover{
+    background-image: url('../images/bgLinkHover.png');
+}
+#footerCenter #active{
+    background-image: url('../images/bgLinkActive.png') !important;
+}
+#footerRight{
+    /*border: 1px solid red !important;*/
+    width: 30%;
+    height: 50px;
+    float: right;
+    text-align: right;
+}
+#footerRight #webStore, #footerRight #configuration{
+    width: 68px;
+    height: 25px;
+    color: #7F7F7F;
+    font-size: 0.9em;
+    font-weight: bold;
+    text-decoration: none;
+    margin-top: 5px;
+    margin-right: 20px;
+    padding-top: 15px;
+    padding-right: 50px;
+    display: inline-block;
+    background-repeat: no-repeat;
+    background-position: right;
+}
+#footerRight #configuration{
+    background-image: url('../images/configIcon.png');
+}
+#footerRight #webStore{
+    background-image: url('../images/shopIcon.png');
+}
+#footerLeft{
+    /*border: 1px solid red !important;*/
+    width: 30%;
+    height: 50px;
+    float: left;
+    margin-left: 20px;
+    margin-top: 2px;
+    background-image: url('../images/evolutivo.png');
+    background-repeat: no-repeat;
+}
+
+/************GRID PAGE STYLE******************/
+#gridContent{
+    margin: 0 auto;
+    width: 75%;
+    height: 100%;
+    overflow: hidden;
+}
+#gridContent div{
+    margin-bottom: 0.5%;
+}
+#position2{
+  float:left;
+  margin-right:2%;
+    width: 32%;
+    height: 45%;
+    position:relative;
+    overflow: hidden;
+    background-color: #efefef;
+}
+#position1{
+    float: right;
+    width: 32%;
+    height: 45%;
+    position:relative;
+    overflow: hidden;
+    background-color: #efefef;
+}
+
+#position3{
+   margin-left: 34%;
+    width: 32%;
+    height: 45%;
+    position:relative;
+    overflow: hidden;
+    background-color: #efefef;
+}
+#position4{
+    float: right;
+    width: 32%;
+    height: 45%;
+    position:relative;
+    overflow: hidden;
+    background-color: #efefef;
+}
+#position5{
+  float:left;
+  margin-right:2%;
+    width: 32%;
+    height: 45%;
+    position:relative;
+    overflow: hidden;
+    background-color: #efefef;
+}
+#position6{
+   margin-left: 34%;
+    width: 32%;
+    height: 45%;
+    position:relative;
+    overflow: hidden;
+    background-color: #efefef;
+}
+
+#gridContent .k-grouping-header{
+    display: none !important;
+}
+#gridContent .k-grid{
+    height: 340px !important;
+}
+#gridContent .k-grid-content{
+    height: 290px !important;
+}
+#gridContent .objbox{
+    height: 65% !important;
+}
+
+/************ALL APP PAGE STYLE******************/
+.evvtCanvas{
+    /*border: 1px solid red !important;*/
+    width: 1300px !important;
+    margin: 0px auto;
+    text-align: center;
+}
+#allApp{
+    /*overflow-y: scroll;*/
+    height: 100%;
+    /*border: 1px solid red;*/
+}
+#allApp .evvtappbox{
+    /*border: 1px solid blue !important;*/
+    width: 130px !important;
+    height: 120px !important;
+    margin: 0px 10px;
+    margin-top: 20px;
+
+}
+#allApp img{
+    /*border: 1px solid red;*/
+    left: 0px;
+    top: 0px;
+    margin: 0px;
+    margin-bottom: 20px;
+}
+#allApp #appTitle{
+    color: #7F7F7F;
+    font-size: 0.9em;
+    font-weight: bold;
+    /*border: 1px solid red;*/
+}
+#allApp #evvtapptrash{
+    position: absolute;
+    left: 100%;
+    top: 80%;
+    margin-left: -130px;
+    margin-top: -130px;
+}
+/***********SHOW CASE PAGE STYLE****************/
+#evvtCanvas{
+    height: 100%;
+}
+#evvtCanvas img{
+    opacity: 0.5;
+}
+#evvtCanvas img:hover{
+    opacity: 1;
+}
+#showCase{
+    width: 800px;
+    height: 500px;
+    position: absolute;
+    top:50%;
+    left: 50%;
+    margin-left: -400px;
+    margin-top: -250px;
+}
+#showCase div{
+    text-align: center;
+    width: 150px !important;
+    /*height: 150px !important;*/
+    margin: 0px !important;
+    padding: 0px !important;
+    display: inline-block;
+    color: #7F7F7F;
+    font-size: 0.9em;
+    font-weight: bold;
+    margin: 50px !important;
+}
+#showCase img{
+    margin: 0px;
+    padding: 0px;
+    width: 128px !important;
+    height: 128px !important;
+    margin-bottom: 10px;
+}
