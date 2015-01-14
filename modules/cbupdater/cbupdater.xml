@@ -168,4 +168,11 @@
 	<classname>SendEmailFromAddress</classname>
 	<systemupdate>true</systemupdate>
 </changeSet>
+<changeSet>
+	<author>eri</author>
+	<description>Add EvvtApps Module</description>
+	<filename>build/changeSets/evvtappsimport.php</filename>
+	<classname>evvtappsimport</classname>
+	<systemupdate>true</systemupdate>
+</changeSet>
 </updatesChangeLog>
