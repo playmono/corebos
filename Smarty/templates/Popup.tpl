@@ -1,5 +1,4 @@
 {*<!--
-
 /*********************************************************************************
 ** The contents of this file are subject to the vtiger CRM Public License Version 1.0
  * ("License"); You may not use this file except in compliance with the License
@@ -7,13 +6,47 @@
  * The Initial Developer of the Original Code is vtiger.
  * Portions created by vtiger are Copyright (C) vtiger.
  * All Rights Reserved.
-*
  ********************************************************************************/
-
 -->*}
 <script>
 var image_pth = '{$IMAGE_PATH}';
-
+{literal}
+function QCreate(module,urlpop) {
+	if (module != 'none') {
+		$("status").style.display="inline";
+		if (module == 'Events') {
+			module = 'Calendar';
+			var urlstr = '&activity_mode=Events&from=popup&pop='+urlpop;
+		} else if(module == 'Calendar') {
+			module = 'Calendar';
+			var urlstr = '&activity_mode=Task&from=popup&pop='+urlpop;
+		} else {
+			var urlstr = '&from=popup&pop='+urlpop;
+		}
+		new Ajax.Request(
+			'index.php',
+				{queue: {position: 'end', scope: 'command'},
+				method: 'post',
+				postBody: 'module='+module+'&action='+module+'Ajax&file=QuickCreate'+urlstr,
+				onComplete: function(response){
+					$("status").style.display="none";
+					$("qcformpop").style.display="inline";
+					$("qcformpop").innerHTML = response.responseText;
+					// Evaluate all the script tags in the response text.
+					var scriptTags = $("qcformpop").getElementsByTagName("script");
+					for(var i = 0; i< scriptTags.length; i++){
+						var scriptTag = scriptTags[i];
+						eval(scriptTag.innerHTML);
+					}
+					eval($("qcformpop"));
+				}
+			}
+		);
+	} else {
+		hide('qcformpop');
+	}
+}
+{/literal}
 function showAllRecords()
 {ldelim}
         modname = document.getElementById("relmod").name;
@@ -48,6 +81,7 @@ function redirectWhenNoRelatedRecordsFound()
 <link rel="stylesheet" type="text/css" href="{$THEME_PATH}style.css">
 <script language="JavaScript" type="text/javascript" src="include/js/ListView.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/general.js"></script>
+<script language="JavaScript" type="text/javascript" src="include/js/QuickCreate.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/Inventory.js"></script>
 <script language="JavaScript" type="text/javascript" src="include/js/json.js"></script>
 <!-- vtlib customization: Javascript hook -->
@@ -162,12 +196,15 @@ function set_focus() {ldelim}
 								{/if}
 								{* END *}
 							</td>
-							<td width="20%" class="dvtCellLabel">
+							<td width="18%" class="dvtCellLabel">
 								<input type="button" name="search" value=" &nbsp;{$APP.LBL_SEARCH_NOW_BUTTON}&nbsp; " onClick="callSearch('Basic');" class="crmbutton small create">
+							</td>
+							<td width="2%" class="dvtCellLabel">
+								{if in_array($MODULE,$QCMODULEARRAY)}<a href="javascript:QCreate('{$MODULE}','{$POPUP}');"><img src="{'select.gif'|@vtiger_imageurl:$THEME}" align="left" border="0"></a>{/if}
 							</td>
 						</tr>
 						 <tr>
-							<td colspan="4" align="center">
+							<td colspan="5" align="center">
 								<table width="100%" class="small">
 								<tr>	
 									{$ALPHABETICAL}
@@ -185,7 +222,7 @@ function set_focus() {ldelim}
                                 </tr>
                                 {/if}
 			</table>
-
+			<div id="qcformpop"></div>
 			<div id="ListViewContents">
 				{include file="PopupContents.tpl"}
 			</div>

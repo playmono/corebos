@@ -1626,6 +1626,7 @@ function setObjectValuesFromRequest($focus) {
 			$focus->column_fields[$fieldname] = $value;
 		}
 	}
+	$focus = cbEventHandler::do_filter('corebos.filter.editview.setObjectValues', $focus);
 	$log->debug("Exiting setObjectValuesFromRequest method ...");
 }
 
@@ -2486,6 +2487,28 @@ function makeRandomPassword() {
 	}
 	$log->debug("Exiting makeRandomPassword method ...");
 	return $pass;
+}
+
+/**
+ * Function to get the UItype for a field by the fieldname.
+ * Takes the input as $module - module name,and fieldname of the field
+ * returns the uitype, integer type
+ */
+function getUItypeByFieldName($module, $fieldname) {
+	global $log;
+	$log->debug("Entering getUItypeByFieldName(" . $module . ") method ...");
+	$tabIdList = array();
+	//To find tabid for this module
+	$tabIdList[] = getTabid($module);
+	global $adb;
+	if ($module == 'Calendar') {
+		$tabIdList[] = getTabid('Events');
+	}
+	$sql = 'select uitype from vtiger_field where tabid IN (' . generateQuestionMarks($tabIdList) . ') and fieldname=?';
+	$result = $adb->pquery($sql, array($tabIdList, $fieldname));
+	$uitype = $adb->query_result($result, 0, "uitype");
+	$log->debug("Exiting getUItypeByFieldName method ...");
+	return $uitype;
 }
 
 /**

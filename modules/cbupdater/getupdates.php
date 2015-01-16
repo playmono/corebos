@@ -19,7 +19,7 @@
 *************************************************************************************************/
 
 //error_reporting(E_ALL); ini_set('display_errors', 'on');
-global $adb, $log, $mod_strings, $app_strings, $currentModule, $current_user, $theme, $singlepane_view;;
+global $adb, $log, $mod_strings, $app_strings, $currentModule, $current_user, $theme, $singlepane_view;
 include_once 'modules/cbupdater/cbupdater.php';
 include_once 'modules/cbupdater/cbupdaterHelper.php';
 
@@ -83,16 +83,16 @@ if (count($cbupdate_files)>0) {
 		} else {
 			$error = true;
 			$errmsg = getTranslatedString('err_invalidupdatefile',$currentModule).'<br>';
-			foreach (libxml_get_errors() as $error) {
-				$errmsg .= display_xml_error($error);
+			foreach (libxml_get_errors() as $err) {
+				$errmsg .= display_xml_error($err);
 			}
 			libxml_clear_errors();
 		}
 	} else {
 		$error = true;
 		$errmsg = getTranslatedString('err_invalidupdatefile',$currentModule).'<br>';
-		foreach (libxml_get_errors() as $error) {
-			$errmsg .= display_xml_error($error);
+		foreach (libxml_get_errors() as $err ) {
+			$errmsg .= display_xml_error($err);
 		}
 		libxml_clear_errors();
 	}
@@ -116,3 +116,4 @@ $smarty->assign('CBUPDATES', $cbupdatesfound);
 include('modules/cbupdater/forcedButtons.php');
 $smarty->assign('CHECK', $tool_buttons);
 $smarty->display('modules/cbupdater/getupdates.tpl');
+?>
