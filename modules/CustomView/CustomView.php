@@ -221,6 +221,9 @@ class CustomView extends CRMEntity {
 		while ($cvrow = $adb->fetch_array($result)) {
 			if ($cvrow['viewname'] == 'All') {
 				$cvrow['viewname'] = $app_strings['COMBO_ALL'];
+			} else { /** Should the filter shown?  */
+				$return = cbEventHandler::do_filter('corebos.filter.listview.filter.show', $cvrow);
+				if($return == false) continue;
 			}
 
 			$option = '';
@@ -867,7 +870,7 @@ class CustomView extends CRMEntity {
 	 */
 	function getAdvFilterByCvid($cvid) {
 
-		global $adb, $log, $default_charset, $current_user;
+		global $adb, $log, $default_charset, $current_user,$currentModule,$mod_strings;
 
 		$advft_criteria = array();
 
@@ -898,6 +901,10 @@ class CustomView extends CRMEntity {
 				$criteria['comparator'] = $relcriteriarow["comparator"];
 				$advfilterval = html_entity_decode($relcriteriarow["value"], ENT_QUOTES, $default_charset);
 				$col = explode(":", $relcriteriarow["columnname"]);
+				$uitype_value = getUItypeByFieldName($currentModule, $col[2]);
+				if($uitype_value == '15' || $uitype_value == '16' || $uitype_value == '33') {
+					$advfilterval = getTranslationKeyFromTranslatedValue($currentModule, $advfilterval);
+				}
 				$temp_val = explode(",", $relcriteriarow["value"]);
 				if ($col[4] == 'D' || ($col[4] == 'T' && $col[1] != 'time_start' && $col[1] != 'time_end') || ($col[4] == 'DT')) {
 					$val = Array();

@@ -12,24 +12,6 @@
  * All Rights Reserved.
  * Contributor(s): ______________________________________.
  ********************************************************************************/
-/*********************************************************************************
- * $Header$
- * Description:  Includes generic helper functions used throughout the application.
- * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
- * All Rights Reserved.
- * Contributor(s): ______________________________________..
- ********************************************************************************/
-
-
-
-/** This function returns the name of the person.
-  * It currently returns "first last".  It should not put the space if either name is not available.
-  * It should not return errors if either name is not available.
-  * If no names are present, it will return ""
-  * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
-  * All Rights Reserved.
-  * Contributor(s): ______________________________________..
-  */
 
 require_once('include/database/PearDatabase.php');
 require_once('include/ComboUtil.php'); //new
@@ -42,6 +24,7 @@ require_once('include/utils/SearchUtils.php');
 require_once('include/FormValidationUtil.php');
 require_once('include/DatabaseUtil.php');
 require_once('include/events/SqlResultIterator.inc');
+require_once('include/events/cbEventHandler.php');
 require_once('include/fields/DateTimeField.php');
 require_once('include/fields/CurrencyField.php');
 require_once('data/CRMEntity.php');
@@ -967,7 +950,7 @@ function decide_to_html(){
 	if($request['module'] != 'Settings' && $request['file'] != 'ListView' && $request['module'] != 'Portal' && $request['module'] != "Reports")// && $request['module'] != 'Emails')
 		$ajax_action = $request['module'].'Ajax';
 
-	if($action != 'CustomView' && $action != 'Export' && $action != $ajax_action && $action != 'LeadConvertToEntities' && $action != 'CreatePDF' && $action != 'ConvertAsFAQ' && $_REQUEST['module'] != 'Dashboard' && $action != 'CreateSOPDF' && $action != 'SendPDFMail' && (!isset($_REQUEST['submode'])) ) {
+	if($action != 'CustomView' && $action != 'Export' && $action != $ajax_action && $action != 'LeadConvertToEntities' && $action != 'CreatePDF' && $action != 'ConvertAsFAQ' && $request['module'] != 'Dashboard' && $action != 'CreateSOPDF' && $action != 'SendPDFMail' && (!isset($_REQUEST['submode'])) ) {
 		$doconvert = true;
 	} else if($search == true) {
 		// Fix for tickets #4647, #4648. Conversion required in case of search results also.
@@ -3148,6 +3131,49 @@ function getAccessPickListValues($module)
 	$log->debug("Exit from function getAccessPickListValues($module)");
 
 	return $fieldlists;
+}
+
+/** Returns a comma separated list of translation indexes in the current language of the indicated module, that
+ * correspond to the given string. In other words: given a string that has been translated, this function will
+ * try to return the key value used to obtain the translated string
+ * @param string $module - module in which to search for the keys
+ * @param string $translated - comma separated list of translated strings
+ * @return string comma separated list of keys
+**/
+function getTranslationKeyFromTranslatedValue($module, $translated) {
+	global $current_language;
+	static $purified_cache = array();
+
+	if (array_key_exists($module.$translated, $purified_cache)) {
+		return $purified_cache[$module.$translated];
+	}
+
+	$modstrs = return_module_language($current_language, $module);
+	$values = array();
+	$strings = explode(',' , $translated);
+	foreach($strings as $string) {
+		$new_value = $string;
+		// Get all the keys for the translated value
+		$mod_keys = array_keys($modstrs, $string);
+		if (count($mod_keys)==0) {
+			$mod_keys = array_keys($modstrs, ucfirst($string));
+			if (count($mod_keys)==0) {
+				$mod_keys = array_keys($modstrs, ucwords($string));
+			}
+		}
+		// Iterate on the keys, to get the first key which doesn't start with LBL_ (assuming it is not used in PickList)
+		foreach($mod_keys as $mod_idx=>$mod_key) {
+			$stridx = strpos($mod_key, 'LBL_');
+			if ($stridx !== 0) {
+				$new_value = $mod_key;
+				break;
+			}
+		}
+		$values[] = $new_value;
+	}
+	$translated = implode(',', $values);
+	$purified_cache[$module.$translated] = $translated;
+	return $translated;
 }
 
 function get_config_status() {

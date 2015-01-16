@@ -12,13 +12,6 @@
  * All Rights Reserved.
  * Contributor(s): ______________________________________.
  ********************************************************************************/
-/*********************************************************************************
- * $Header: /advent/projects/wesat/vtiger_crm/sugarcrm/include/language/en_us.lang.php,v 1.68 2005/04/26 06:50:39 rank Exp $
- * Description:  Defines the English language pack for the base application.
- * Portions created by SugarCRM are Copyright (C) SugarCRM, Inc.
- * All Rights Reserved.
- * Contributor(s): ______________________________________..
- ********************************************************************************/
 $app_strings = array(
 'LBL_BROWSER_TITLE' => 'vtiger CRM 5 - Commercial Open Source CRM',
 'LBL_MY_ACCOUNT'=>'Mein Konto',
@@ -42,7 +35,6 @@ $app_strings = array(
 'LBL_ALT_HOT_KEY'=>'Alt+',
 'LBL_SAVE_LABEL'=>'Speichern',
 'LBL_REPLACE_LABEL' => 'Ersetzen',
-'LBL_SAVE_AS'=>" Save As",
 'LBL_APPLY_BUTTON_LABEL' => 'Anwenden',
 'LBL_SEND_MAIL_BUTTON'=>'E-Mail senden',
 'LBL_SAVE_BUTTON_TITLE'=>'Speichern [Alt+S]',
@@ -218,6 +210,7 @@ $app_strings = array(
 'NTC_MERGE_CONFIRMATION' => 'Sind Sie sicher?',
 'LBL_MERGE_BUTTON_TITLE' => 'Zusammenführen',
 'LBL_MERGE_BUTTON_KEY' => 'Zusammenführen',
+'DownloadMergeFile'=>'Download merged document',
 'LBL_SELECTEMAILTEMPLATE_BUTTON_TITLE'=>'E-Mail Vorlage wählen',
 'LBL_SELECTEMAILTEMPLATE_BUTTON_KEY'=>'E-Mail Vorlage wählen',
 'LBL_SELECTEMAILTEMPLATE_BUTTON_LABEL'=>'E-Mail Vorlage wählen',
@@ -335,6 +328,8 @@ $app_strings = array(
 'COMBO_HELPDESK'=>'Trouble Tickets',
 'COMBO_USERS'=>'Benutzer',
 'COMBO_CAMPAIGNS'=>'Kampagnen',
+'COMBO_VENDORS' => 'Vendors', //MSL
+'LBL_VENDOR_NAME' => 'Vendor Name', //MSL
 'LBL_SELECT'=>'wähle',
 'LBL_EDIT'=>'Bearbeiten',
 'LBL_DELETE'=>'Lö',
@@ -1317,6 +1312,8 @@ $app_strings = array(
 'LBL_ADD_MAPPING'=> 'Zuordnung hinzufügen',
 'LBL_FIELD_MAPPING' => 'Feldzuordnung',
 'ERROR_GETTING_FILTER' => 'ERROR Retrieving information from filter. Please delete the filter and try again.',
+'Upload Images' => 'Upload Images',
+'Drag file here or click to upload' => 'Drag file here or click to upload',
 );
 
 $app_list_strings = array (

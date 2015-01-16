@@ -1,4 +1,11 @@
 <?php
+/*********************************************************************************
+ * The contents of these fileis are subject to the Mozilla Public License Version 1.1
+ * ("License"); You may not use this file except in compliance with the License.
+ * Software distributed under the License is distributed on an  "AS IS"  basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License for
+ * the specific language governing rights and limitations under the License.
+ ********************************************************************************/
 $app_list_strings = array (
   'moduleList' =>
   array (
@@ -97,7 +104,7 @@ $app_list_strings = array (
 
 
 $app_strings = array (
-  'LBL_BROWSER_TITLE' => 'vtiger CRM 5 - CRM Commerciale Open Source',
+  'LBL_BROWSER_TITLE' => 'coreBOS CRM - CRM Commerciale Open Source',
   'LBL_MY_ACCOUNT' => 'Il Mio Account',
   'LBL_MY_PREFERENCES' => 'Le Mie Preferenze',
   'LBL_ADMIN' => 'Amministratore',
@@ -111,8 +118,8 @@ $app_strings = array (
   'all' => 'Tutti',
   'LBL_UPCOMING_EVENTS' => 'Prossime attivit&agrave;',
   'LBL_PENDING_EVENTS' => 'Attivit&agrave; Pendenti',
-  'NTC_WELCOME_MESSAGE' => 'Benvenuti in vtiger CRM!',
-  'NTC_DESCRIPTION' => 'Usare un nome utente ed una password validi per accedere a vtiger CRM.',
+  'NTC_WELCOME_MESSAGE' => 'Benvenuti in coreBOS CRM!',
+  'NTC_DESCRIPTION' => 'Usare un nome utente ed una password validi per accedere a coreBOS CRM.',
   'NTC_WELCOME' => 'Benvenuto',
   'NTC_NO_ITEMS_DISPLAY' => 'nessuno',
   'LBL_OR' => 'o',
@@ -217,7 +224,7 @@ $app_strings = array (
   'LBL_LIST_OF' => 'di',
   'LNK_PRINT' => 'Stampa',
   'LNK_HELP' => 'Aiuto',
-  'LNK_VTDOCS' => 'Documenti vtiger',
+  'LNK_VTDOCS' => 'Documenti coreBOS',
   'LNK_ABOUT' => 'About',
   'LNK_OUTLOOK' => './include/images/outlook_download.gif',
   'SINGLE_Accounts' => 'Azienda',
@@ -294,6 +301,7 @@ $app_strings = array (
   'NTC_MERGE_CONFIRMATION' => 'Sicuro di voler procedere con il merge del record?',
   'LBL_MERGE_BUTTON_TITLE' => 'Merge',
   'LBL_MERGE_BUTTON_KEY' => 'Merge',
+  'DownloadMergeFile'=>'Download merged document',
   'LBL_SELECTEMAILTEMPLATE_BUTTON_TITLE' => 'Seleziona un Template Email',
   'LBL_SELECTEMAILTEMPLATE_BUTTON_KEY' => 'Seleziona un Template Email',
   'LBL_SELECTEMAILTEMPLATE_BUTTON_LABEL' => 'Seleziona un Template Email',
@@ -525,7 +533,7 @@ $app_strings = array (
   'LNK_NEW_FAQ' => 'Nuova FAQ',
   'Vendor Name' => 'Nome Fornitore',
   'LNK_WEARE' => 'Chi siamo',
-  'LBL_ABOUTUS_TITLE' => 'vtiger CRM - Chi siamo',
+  'LBL_ABOUTUS_TITLE' => 'coreBOS CRM - Chi siamo',
   'LBL_DISCUSS' => 'Discuti con altri Utenti',
   'Quote Stage' => 'Stadio Preventivo',
   'Potential Name' => 'Nome Opportunit&agrave;',
@@ -679,7 +687,7 @@ $app_strings = array (
   'LBL_CPY_MAILING_ADDRESS' => 'Copia l`indirizzo di Mail',
   'LBL_CPY_OTHER_ADDRESS' => 'Copia l`altro indirizzo',
   'LBL_PERMISSION' => 'Non ti &egrave; permesso eseguire questa operazione',
-  'VTIGER' => 'vtiger',
+  'VTIGER' => 'coreBOS',
   'LBL_DIRECT_AMOUNT_DISCOUNT' => 'Sconto Diretto Quantit&agrave;',
   'LBL_NO_DISCOUNT_FOR_THIS_PRODUCT' => 'Nessuno sconto per questo prodotto',
   'LBL_NO_DISCOUNT_FOR_THIS_LINE_ITEM'=> 'Non esiste sconto per questo oggetto',
@@ -884,7 +892,7 @@ $app_strings = array (
   'MSG_THANK_YOU' => 'Grazie',
   'MSG_HAS_BEEN_CREATED_FOR' => '&egrave; stato creato per',
   'MSG_THANKS' => 'Grazie,',
-  'MSG_VTIGERTEAM' => ' vtiger Team',
+  'MSG_VTIGERTEAM' => ' coreBOS Team',
   'MSG_IS_NOT_UPLOADED' => 'non &egrave; stata caricata. Tipi possibili di file sono - jpeg, png, jpg, pjpeg, x-png oppure gif',
   'MSG_IMAGE_ERROR' => 'Immagine non trovata',
   'Information' => 'Informazioni',
@@ -1151,7 +1159,7 @@ $app_strings = array (
 'LBL_MASSEDIT_FORM_HEADER' => 'Mass Edit - Modifica Campi',
 'Product Bundles' => 'Prodotto Bundle',
 'VTLIB_MOD_NOT_ACTIVE' => ' modulo non &egrave; attivo!',
-'LBL_VTIGER_NEWS' => 'vtiger News',
+'LBL_VTIGER_NEWS' => 'coreBOS News',
 'LBL_FEEDBACK' => 'Feedback',
 'CallHistory' => 'Storia Chiamate',
 'PBXManager' => 'Gestore Chiamate',
@@ -1167,7 +1175,7 @@ $app_strings = array (
 'LBL_CALLER_INFORMATION' => 'Informazioni Chiamante',
 'LBL_CALLER_NUMBER' => 'Numero :',
 'LBL_CALLER_NAME' => 'Nome :',
-'LBL_INFORMATION_VTIGER' => 'Informazioni da vtiger',
+'LBL_INFORMATION_VTIGER' => 'Informazioni da coreBOS',
 'LBL_DUPLICATE' => 'Duplicato',
 'LBL_CLICK' => 'Click',
 'LBL_TO_CONFIGURE' => 'per configurare la',
@@ -1261,6 +1269,8 @@ $app_strings = array (
 'LBL_ADD_MAPPING'=> 'Aggiungi mappatura',
 'LBL_FIELD_MAPPING' => 'Mappatura Campo',
 'LBL_MANDATORY_FIELD_MISSING'=>'Manca il valore in un campo obbligatorio',
+'Upload Images' => 'Upload Images',
+'Drag file here or click to upload' => 'Drag file here or click to upload',
 );
 
 // Translation for currency names
