@@ -169,7 +169,6 @@
 	<systemupdate>true</systemupdate>
 </changeSet>
 <changeSet>
-<<<<<<< HEAD
 	<author>joebordes</author>
 	<description>Mass Upload Image On Product</description>
 	<filename>build/changeSets/MassUploadImageOnProduct.php</filename>
