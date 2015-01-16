@@ -337,6 +337,8 @@ $app_strings = array (
 'COMBO_HELPDESK' => 'Trouble Tickets',
 'COMBO_USERS' => 'Users',
 'COMBO_CAMPAIGNS' => 'Campaigns',
+'COMBO_VENDORS' => 'Vendors', //MSL
+'LBL_VENDOR_NAME' => 'Vendor Name', //MSL
 'LBL_SELECT' => 'Select',
 'LBL_EDIT' => 'Edit',
 'LBL_DELETE' => 'Delete',
@@ -1308,6 +1310,8 @@ $app_strings = array (
 'LBL_FIELD_MAPPING' => 'Field Mapping',
 'LBL_MANDATORY_FIELD_MISSING'=>'Mandatory Field value is missing',
 'ERROR_GETTING_FILTER' => 'ERROR Retrieving information from filter. Please delete the filter and try again.',
+'Upload Images' => 'Upload Images',
+'Drag file here or click to upload' => 'Drag file here or click to upload',
 );
 
 $app_list_strings = array (

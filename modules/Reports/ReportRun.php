@@ -583,6 +583,11 @@ class ReportRun extends CRMEntity
 				$criteria['comparator'] = $relcriteriarow["comparator"];
 				$advfilterval = $relcriteriarow["value"];
 				$col = explode(":",$relcriteriarow["columnname"]);
+				list($module,$void) = explode('_',$col[2],2);
+				$uitype_value = getUItypeByFieldName($module, $col[3]);
+				if($uitype_value == '15' || $uitype_value == '16' || $uitype_value == '33') {
+					$advfilterval = getTranslationKeyFromTranslatedValue($module, $advfilterval);
+				}
 				$criteria['value'] = $advfilterval;
 				$criteria['column_condition'] = $relcriteriarow["column_condition"];
 
@@ -960,6 +965,9 @@ class ReportRun extends CRMEntity
                     }
                     $adv_filter_value = implode(",",$val);
                 }
+				if($fieldType=='picklist' || $fieldType=='multipicklist') {
+					$adv_filter_value = getTranslationKeyFromTranslatedValue($module, $adv_filter_value);
+				}
 				$criteria = array();
 				$criteria['columnname'] = $adv_filter_column;
 				$criteria['comparator'] = $adv_filter_comparator;
@@ -3172,7 +3180,7 @@ class ReportRun extends CRMEntity
 
 		if(isset($arr_val)) {
 			foreach($arr_val[0] as $key=>$value) {
-				$worksheet->write(0, $count, utf8_decode($key) , utf8_decode($header));
+				$worksheet->write(0, $count, utf8_decode($key), $header);
 				$count = $count + 1;
 			}
 			$rowcount=1;

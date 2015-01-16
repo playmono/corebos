@@ -1,5 +1,4 @@
 <?php
-
 /*******************************************************************************
  * The contents of this file are subject to the following licences:
  * - SugarCRM Public License Version 1.1.2 http://www.sugarcrm.com/SPL
@@ -62,7 +61,6 @@ $app_strings = array (
 'LBL_SEND_MAIL_BUTTON' => 'Stuur e-mail',
 'LBL_SAVE_BUTTON_TITLE' => 'Bewaar [Alt+S]',
 'LBL_EDIT_BUTTON_TITLE' => 'Bewerk [Alt+E]',
-'LBL_SAVE_AS'=>" Save As",
 'LBL_CONVERTSO_BUTTON_TITLE' => 'Maak een verkooporder',
 'LBL_CONVERTINVOICE_BUTTON_TITLE' => 'Maak een factuur',
 'LBL_EDIT_BUTTON' => 'Bewerk',
@@ -235,6 +233,7 @@ $app_strings = array (
 'NTC_MERGE_CONFIRMATION' => 'Wilt u dit echt samenvoegen?',
 'LBL_MERGE_BUTTON_TITLE' => 'Samenvoegen',
 'LBL_MERGE_BUTTON_KEY' => 'Samenvoegen',
+'DownloadMergeFile'=>'Download merged document',
 'LBL_SELECTEMAILTEMPLATE_BUTTON_TITLE' => 'Selecteer e-mail sjabloon',
 'LBL_SELECTEMAILTEMPLATE_BUTTON_KEY' => 'Selecteer e-mail sjabloon',
 'LBL_SELECTEMAILTEMPLATE_BUTTON_LABEL' => 'Selecteer e-mail sjabloon',
@@ -354,6 +353,8 @@ $app_strings = array (
 'COMBO_HELPDESK' => 'Help-tickets',
 'COMBO_USERS' => 'Gebruikers',
 'COMBO_CAMPAIGNS' => 'Campagnes',
+'COMBO_VENDORS' => 'Vendors', //MSL
+'LBL_VENDOR_NAME' => 'Vendor Name', //MSL
 'LBL_SELECT' => 'Selecteer',
 'LBL_EDIT' => 'Bewerk',
 'LBL_DELETE' => 'Verwijder',
@@ -1347,6 +1348,8 @@ $app_strings = array (
 'LBL_MORE'=>'Meer',
 'LBL_CRM_SETTINGS' => 'CRM instellingen',
 'ERROR_GETTING_FILTER' => 'ERROR Retrieving information from filter. Please delete the filter and try again.',
+'Upload Images' => 'Upload Images',
+'Drag file here or click to upload' => 'Drag file here or click to upload',
 );
 
 $app_list_strings = array (

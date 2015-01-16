@@ -38,7 +38,7 @@ function vtlib_setvalue_from_popup(recordid,value,target_fieldname) {
  */
 function vtlib_open_popup_window(fromlink,fldname,MODULE,ID) {
 	if (fromlink == 'qcreate')
-		window.open("index.php?module="+ document.QcEditView[fldname+'_type'].value +"&action=Popup&html=Popup_picker&form=vtlibPopupView&forfield="+fldname+"&srcmodule="+MODULE+"&forrecord="+ID,"vtlibui10","width=680,height=602,resizable=0,scrollbars=0,top=150,left=200");
+		window.open("index.php?module="+ document.QcEditView[fldname+'_type'].value +"&action=Popup&html=Popup_picker&form=vtlibPopupView&forfield="+fldname+"&srcmodule="+MODULE+"&forrecord="+ID,"vtlibui10qc","width=680,height=602,resizable=0,scrollbars=0,top=150,left=200");
 	else
 		window.open("index.php?module="+ document.EditView[fldname+'_type'].value +"&action=Popup&html=Popup_picker&form=vtlibPopupView&forfield="+fldname+"&srcmodule="+MODULE+"&forrecord="+ID,"vtlibui10","width=680,height=602,resizable=0,scrollbars=0,top=150,left=200");
 	return true;
@@ -193,8 +193,16 @@ function vtlib_loadDetailViewWidget(urldata, target, indicator) {
         onComplete: function(response) {
             if(target) {
                 target.innerHTML = response.responseText;
-                if(typeof ParseAjaxResponse == 'function') 
-                ParseAjaxResponse(response.responseText);
+                if(typeof ParseAjaxResponse == 'function')
+                    ParseAjaxResponse(response.responseText);
+                else {
+					// Evaluate all the script tags in the response text.
+					var scriptTags = target.getElementsByTagName('script');
+					for(var i = 0; i< scriptTags.length; i++){
+						var scriptTag = scriptTags[i];
+						eval(scriptTag.innerHTML);
+					}
+                }
                 if(indicator) {
                     indicator.hide();
                 }

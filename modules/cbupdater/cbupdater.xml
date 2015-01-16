@@ -169,6 +169,21 @@
 	<systemupdate>true</systemupdate>
 </changeSet>
 <changeSet>
+<<<<<<< HEAD
+	<author>joebordes</author>
+	<description>Mass Upload Image On Product</description>
+	<filename>build/changeSets/MassUploadImageOnProduct.php</filename>
+	<classname>MassUploadImageOnProduct</classname>
+	<systemupdate>false</systemupdate>
+</changeSet>
+<changeSet>
+	<author>mslokhat</author>
+	<description>Add Calendar Events to Vendors</description>
+	<filename>build/changeSets/addvend_activities.php</filename>
+	<classname>addVendorActivities</classname>
+	<systemupdate>false</systemupdate>
+</changeSet>
+<changeSet>
 	<author>eri</author>
 	<description>Add EvvtApps Module</description>
 	<filename>build/changeSets/evvtappsimport.php</filename>

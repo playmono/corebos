@@ -218,6 +218,7 @@ $app_strings = array (
 'NTC_MERGE_CONFIRMATION' => 'Voce tem certeza que deseja mesclar este registro?',
 'LBL_MERGE_BUTTON_TITLE' => 'Mesclar',
 'LBL_MERGE_BUTTON_KEY' => 'Mesclar',
+'DownloadMergeFile'=>'Download merged document',
 'LBL_SELECTEMAILTEMPLATE_BUTTON_TITLE' => 'Selecione Modelo Email',
 'LBL_SELECTEMAILTEMPLATE_BUTTON_KEY' => 'Selecione Modelo Email',
 'LBL_SELECTEMAILTEMPLATE_BUTTON_LABEL' => 'Selecione Modelo Email',
@@ -335,6 +336,8 @@ $app_strings = array (
 'COMBO_HELPDESK' => 'Tickets',
 'COMBO_USERS' => 'Usuários',
 'COMBO_CAMPAIGNS' => 'Campanhas',
+'COMBO_VENDORS' => 'Vendors', //MSL
+'LBL_VENDOR_NAME' => 'Vendor Name', //MSL
 'LBL_SELECT' => 'Selecionar',
 'LBL_EDIT' => 'Editar',
 'LBL_DELETE' => 'Apagar',
@@ -1322,6 +1325,8 @@ $app_strings = array (
 
 'LBL_MANDATORY_FIELD_MISSING'=>'Esta faltando valor campo obrigatório',
 'ERROR_GETTING_FILTER' => 'ERROR Retrieving information from filter. Please delete the filter and try again.',
+'Upload Images' => 'Upload Images',
+'Drag file here or click to upload' => 'Drag file here or click to upload',
 );
 
 $app_list_strings = array (
