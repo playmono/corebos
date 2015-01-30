@@ -137,6 +137,17 @@ foreach ($ActTypes AS $act_id => $act_name) {
                                      "color"=>$Colors_Palete[1],
                                      "textColor"=>$Colors["text"],
                                      "checked"=>$event_checked);
+// MSL : add project task 
+$Projects_Colors = getEColors("type","projects");
+$Projects_Colors_Palette = $colorHarmony->Monochromatic($Projects_Colors["bg"]);
+$Activity_Types["projects"] = array("typename"=>"Project Tasks",
+                           "act_type"=>"task",
+                           "label"=>'Project Tasks',
+                           "title_color"=>$Projects_Colors_Palette[0],
+                           "color"=>$Projects_Colors_Palette[1],
+                           "textColor"=>$Projects_Colors["text"],
+                           "checked"=>$invite_checked);
+//---------
                                        
     unset($Colors);
     unset($Colors_Palete);                                   

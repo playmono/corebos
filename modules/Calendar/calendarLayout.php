@@ -34,6 +34,7 @@ function calendar_layout(& $param_arr,$viewBox='',$subtab='')
         $cal_header['calendar'] = $param_arr['calendar'];
 	$eventlabel = $mod_strings['LBL_EVENTS'];
 	$todolabel = $mod_strings['LBL_TODOS'];
+	$tasklabel = 'Projects Tasks';
 	//if $param_arr['size'] is set to 'small', get small(mini) calendar
 	if(isset($param_arr['size']) && $param_arr['size'] == 'small')
 	{
@@ -50,18 +51,35 @@ function calendar_layout(& $param_arr,$viewBox='',$subtab='')
 		{
 			$eventtab_class = 'dvtSelectedCell';
 			$todotab_class = 'dvtUnSelectedCell';
+			$tasktab_class = 'dvtUnSelectedCell';
 		        $event_anchor = $eventlabel;
 		//	Added for User Based CustomView for Calendar module
 			$todo_anchor = "<a href='index.php?module=Calendar&action=index&view=".$cal_header['view']."".$cal_header['calendar']->date_time->get_date_str()."&viewOption=".$viewBox."&subtab=todo&parenttab=".$category."&$onlyForUserParam'>".$todolabel."</a>";
-					
+			$task_anchor = "<a href='index.php?module=Calendar&action=index&view=".$cal_header['view']."".$cal_header['calendar']->date_time->get_date_str()."&viewOption=".$viewBox."&subtab=task&parenttab=".$category."&$onlyForUserParam'>".$tasklabel."</a>";		
 		}
 		elseif($subtab == 'todo')
 		{
 			$eventtab_class = 'dvtUnSelectedCell';
 			$todotab_class = 'dvtSelectedCell';
+			$tasktab_class = 'dvtUnSelectedCell';
 		//	Added User Based CustomView for Calendar module
 			$event_anchor = "<a href='index.php?module=Calendar&action=index&view=".$cal_header['view']."".$cal_header['calendar']->date_time->get_date_str()."&viewOption=".$viewBox."&subtab=event&parenttab=".$category."&$onlyForUserParam'>".$eventlabel."</a>";
 			$todo_anchor = $todolabel;
+			$task_anchor = "<a href='index.php?module=Calendar&action=index&view=".$cal_header['view']."".$cal_header['calendar']->date_time->get_date_str()."&viewOption=".$viewBox."&subtab=task&parenttab=".$category."&$onlyForUserParam'>".$tasklabel."</a>";
+			
+		}
+		elseif($subtab == 'task')
+		{
+			$eventtab_class = 'dvtUnSelectedCell';
+			$todotab_class = 'dvtUnSelectedCell';
+			$tasktab_class = 'dvtSelectedCell';
+		//	Added User Based CustomView for Calendar module
+		
+			$todo_anchor = "<a href='index.php?module=Calendar&action=index&view=".$cal_header['view']."".$cal_header['calendar']->date_time->get_date_str()."&viewOption=".$viewBox."&subtab=todo&parenttab=".$category."&$onlyForUserParam'>".$todolabel."</a>";
+			
+			$event_anchor = "<a href='index.php?module=Calendar&action=index&view=".$cal_header['view']."".$cal_header['calendar']->date_time->get_date_str()."&viewOption=".$viewBox."&subtab=event&parenttab=".$category."&$onlyForUserParam'>".$eventlabel."</a>";
+			
+			$task_anchor = $tasklabel;
 		}
 		//Ends
 		//To get calendar header and its links(like Day,Week,Month,Year and etc.)
@@ -80,7 +98,9 @@ function calendar_layout(& $param_arr,$viewBox='',$subtab='')
 										<td class="$eventtab_class" id="pi" align="center" nowrap="nowrap" width="75">$event_anchor</td>
 										<td class="dvtTabCache" style="width: 10px;" nowrap="nowrap">&nbsp;</td>
 										<td class="$todotab_class" style="width:100px;" id="mi" align="center" nowrap="nowrap">$todo_anchor</td>
-										<td class="dvtTabCache" nowrap="nowrap">&nbsp;</td>
+										<td class="dvtTabCache" style="width: 10px;" nowrap="nowrap">&nbsp;</td>
+										<td class="$tasktab_class" style="width:100px;" id="mi2" align="center" nowrap="nowrap">$task_anchor</td>
+										<td class="dvtTabCache" nowrap="nowrap">&nbsp;</td><!-- MSL -->
 									</tr>
 								</table>
 							</td>
@@ -103,6 +123,13 @@ EOQ;
 		{
 			$todo_list = "";
 			$todo_list .= getTodosListView($param_arr,'',$subtab);
+			$todo_list .= '</td></tr></table></td></tr></table><br>';
+			echo $todo_list;
+		}
+		elseif($subtab == 'task')
+		{
+			$todo_list = "";
+			$todo_list .= getTasksListView($param_arr,'',$subtab);
 			$todo_list .= '</td></tr></table></td></tr></table><br>';
 			echo $todo_list;
 		}
@@ -2108,13 +2135,25 @@ function constructTodoListView($todo_list,$cal,$subtab,$navigation_array='')
 			{
 				$list_view .="<tr><td>&nbsp;</td>";
 			}
-			$list_view .="<td align='center' width='60%'><span  id='total_activities'>".getTodoInfo($cal,'listcnt')."</span>&nbsp;</td>
+			// MSL
+			if ($subtab =='task') {
+				$list_view .="<td align='center' width='60%'><span  id='total_activities'>".getTaskInfo($cal,'listcnt')."</span>&nbsp;</td>
 				<td align='right' width='28%'>&nbsp;</td>
 			</tr>
 		</table>
 
 			<br><table style='background-color: rgb(204, 204, 204);' class='small' align='center' border='0' cellpadding='5' cellspacing='1' width='98%'>
                         ";
+				
+			} else {
+				$list_view .="<td align='center' width='60%'><span  id='total_activities'>".getTodoInfo($cal,'listcnt')."</span>&nbsp;</td>
+ 				<td align='right' width='28%'>&nbsp;</td>
+			</tr>
+			</table>
+
+			<br><table style='background-color: rgb(204, 204, 204);' class='small' align='center' border='0' cellpadding='5' cellspacing='1' width='98%'>
+                        ";
+                       }
 	$header_rows = count($header);
 	$navigationOutput = getTableHeaderSimpleNavigation($navigation_array, $url_string,"Calendar","index");
 
@@ -2200,4 +2239,284 @@ function getCalendarViewSecurityParameter()
 		$sec_query .= ")";	
 		return $sec_query;
 }
+//-------------------------------------------------------------------------------------------------------------------------------------------------------
+/**
+ * Function to get tasks list scheduled between specified dates
+ * @param array   $calendar              -  collection of objects and strings
+ * @param string  $start_date            -  date string
+ * @param string  $end_date              -  date string
+ * @param string  $info                  -  string 'listcnt' or empty string. if 'listcnt' means it returns no. of todos and no. of pending todos in array format else it returns todos list in array format
+ * return array   $Entries               -  tasklists in array format
+ * Author : MSL
+ */
+function getTasksList(& $calendar,$start_date,$end_date,$info='')
+{
+	global $log,$app_strings,$theme;
+        $Entries = Array();
+	$category = getParentTab();
+	global $adb,$current_user,$mod_strings,$cal_log,$list_max_entries_per_page;
+	$cal_log->debug("Entering getTasksList() method...");
+	require('user_privileges/user_privileges_'.$current_user->id.'.php');
+	require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
+
+	$userNameSql = getSqlForNameInDisplayFormat(array('first_name'=>
+							'vtiger_users.first_name', 'last_name' => 'vtiger_users.last_name'), 'Users');
+   /*$query = "SELECT vtiger_groups.groupname, $userNameSql as user_name, vtiger_crmentity.crmid, vtiger_cntactivityrel.contactid,
+				vtiger_activity.* FROM vtiger_activity
+                INNER JOIN vtiger_crmentity
+					ON vtiger_crmentity.crmid = vtiger_activity.activityid
+                LEFT JOIN vtiger_cntactivityrel
+					ON vtiger_cntactivityrel.activityid = vtiger_activity.activityid
+				LEFT JOIN vtiger_groups
+					ON vtiger_groups.groupid = vtiger_crmentity.smownerid
+				LEFT JOIN vtiger_users
+					ON vtiger_users.id = vtiger_crmentity.smownerid";*/
+	$query = "SELECT vtiger_groups.groupname, $userNameSql  as user_name, vtiger_crmentity.crmid, crm2.crmid, crm2.setype, vtiger_project.projectname, vtiger_projecttask.* 
+				FROM vtiger_projecttask 
+				INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_projecttask.projecttaskid 
+				INNER JOIN vtiger_project ON vtiger_project.projectid = vtiger_projecttask.projectid
+				INNER JOIN vtiger_crmentity crm2 ON crm2.crmid = vtiger_project.linktoaccountscontacts 
+				LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid 
+				LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.smownerid ";
+
+	$query .= getNonAdminAccessControlQuery('Calendar',$current_user);
+	$query .= "WHERE vtiger_crmentity.deleted = 0 ".
+					" AND ((CAST(vtiger_projecttask.startdate AS DATETIME) >= ? AND CAST(vtiger_projecttask.startdate AS DATETIME) <= ?)
+				      OR (CAST(vtiger_projecttask.enddate AS DATETIME) >= ? AND CAST(vtiger_projecttask.enddate AS DATETIME) <= ?)	
+						)";
+
+	$list_query = $query." AND vtiger_crmentity.smownerid = "  . $current_user->id;
+
+	$startDate = new DateTimeField($start_date.' 00:00');
+	$endDate = new DateTimeField($end_date. ' 23:59');
+	$params = $info_params = array($startDate->getDBInsertDateTimeValue(), $endDate->getDBInsertDateTimeValue(),
+									$startDate->getDBInsertDateTimeValue(), $endDate->getDBInsertDateTimeValue()
+									);
+	
+        if($info != '')
+		{
+			//added to fix #4816
+			$groupids = explode(",", fetchUserGroupids($current_user->id));
+			if (count($groupids) > 0 && !is_admin($current_user)) {
+				$com_q = " AND (vtiger_crmentity.smownerid = ?
+					OR vtiger_groups.groupid in (". generateQuestionMarks($groupids) ."))";
+				array_push($info_params, $current_user->id);
+				array_push($info_params, $groupids);
+			} elseif(!is_admin($current_user)) {			
+				$com_q = " AND vtiger_crmentity.smownerid = ?";
+				array_push($info_params, $current_user->id);
+			}
+			//end
+
+			$pending_query = $query." AND (vtiger_projecttask.projecttaskprogress != '100%')".$com_q;
+			$total_q =  $query."".$com_q;
+			if( $adb->dbType == "pgsql")
+			{
+ 		    	$pending_query = fixPostgresQuery( $pending_query, $log, 0);
+		    	$total_q = fixPostgresQuery( $total_q, $log, 0);
+			}
+			$total_res = $adb->pquery($total_q, $info_params);
+			$total = $adb->num_rows($total_res);
+                
+			$res = $adb->pquery($pending_query, $info_params);
+		        $pending_rows = $adb->num_rows($res);
+		
+			$cal_log->debug("Exiting getTasksList() method...");
+			return Array('totaltodo'=>$total,'pendingtodo'=>$pending_rows);
+        }
+	
+	$group_cond = '';
+	$group_cond .= " ORDER BY vtiger_projecttask.startdate ASC";
+	if(isset($_REQUEST['start']) && $_REQUEST['start'] != '')
+		$start = vtlib_purify($_REQUEST['start']);
+	else 
+		$start = 1;
+
+//T6477 changes
+	if(PerformancePrefs::getBoolean('LISTVIEW_COMPUTE_PAGE_COUNT', false) === true){
+		$count_res = $adb->pquery(mkCountQuery($query), $params);
+   		$total_rec_count = $adb->query_result($count_res,0,'count');
+	}else{
+		$total_rec_count = null;
+	}
+
+	$navigation_array = VT_getSimpleNavigationValues($start,$list_max_entries_per_page,$total_rec_count);
+
+	$start_rec = ($start-1) * $list_max_entries_per_page;
+	$end_rec = $navigation_array['end_val'];
+        
+        $list_query = $adb->convert2Sql($query, $params);
+	$_SESSION['Calendar_listquery'] = $list_query;
+
+	if($start_rec < 0)
+		$start_rec = 0;
+
+	//ends
+	$query .= $group_cond." limit $start_rec,$list_max_entries_per_page";
+
+	if( $adb->dbType == "pgsql"){
+ 	    $query = fixPostgresQuery( $query, $log, 0);
+	}
+
+    $result = $adb->pquery($query, $params);
+    $rows = $adb->num_rows($result);
+	$c=0;
+	if($start > 1)
+		$c = ($start-1) * $list_max_entries_per_page;
+	for($i=0;$i<$rows;$i++)
+        {
+		
+                $element = Array();
+		$contact_name = '';
+                $element['no'] = $c+1;
+                $more_link = "";
+                $start_time = "00:00:00";
+				$date_start = $adb->query_result($result,$i,"startdate");
+				$due_date = $adb->query_result($result,$i,"enddate");  //MSL
+				$date = new DateTimeField($date_start.' '.$start_time);
+				$endDate = new DateTimeField($due_date);
+				if(!empty($start_time)){
+					$start_time = $date->getDisplayTime();
+				}
+                $format = $calendar['calendar']->hour_format;
+				$value = getaddEventPopupTime($start_time,$start_time,$format);
+                $element['starttime'] = $value['starthour'].':'.$value['startmin'].''.$value['startfmt'];
+				$element['startdate'] = $date->getDisplayDate();
+				$element['duedate'] = $endDate->getDisplayDate();
+
+                $id = $adb->query_result($result,$i,"projecttaskid");
+                $subject = $adb->query_result($result,$i,"projectname") . " --> " . $adb->query_result($result,$i,"projecttaskname"); 
+		$more_link = "<a href='index.php?action=DetailView&module=ProjectTask&record=".$id."&parenttab=".$category."' class='webMnu'>".$subject."</a>";
+		$element['tododetail'] = $more_link;
+		if(getFieldVisibilityPermission('Calendar',$current_user->id,'taskstatus') == '0')
+		{
+			$taskstatus = $adb->query_result($result,$i,"projecttaskprogress");
+
+			if(!$is_admin && $taskstatus != '')
+			{
+				$roleid=$current_user->roleid;
+				$roleids = Array();
+				$subrole = getRoleSubordinates($roleid);
+				if(count($subrole)> 0)
+				$roleids = $subrole;
+				array_push($roleids, $roleid);
+
+				//here we are checking wheather the table contains the sortorder column .If  sortorder is present in the main picklist table, then the role2picklist will be applicable for this table...
+
+				$sql="select * from vtiger_projecttaskprogress where projecttaskprogress=?";
+				$res = $adb->pquery($sql,array(decode_html($taskstatus)));
+				$picklistvalueid = $adb->query_result($res,0,'picklist_valueid');
+				if ($picklistvalueid != null) {					
+					$pick_query="select * from vtiger_role2picklist where picklistvalueid=$picklistvalueid and roleid in (". generateQuestionMarks($roleids) .")";
+					$res_val=$adb->pquery($pick_query,array($roleids));
+					$num_val = $adb->num_rows($res_val);
+				}
+				if($num_val > 0)
+				$element['status'] = getTranslatedString(decode_html($taskstatus));
+				else
+				$element['status'] = "<font color='red'>".$app_strings['LBL_NOT_ACCESSIBLE']."</font>";
+
+
+			}else
+			$element['status'] = getTranslatedString(decode_html($taskstatus));
+			
+			
+		}
+		if(isPermitted("Calendar","EditView") == "yes" || isPermitted("Calendar","Delete") == "yes")
+			$element['action'] ="<img onClick='getcalAction(this,\"taskcalAction\",".$id.",\"".$calendar['view']."\",\"".$calendar['calendar']->date_time->hour."\",\"".$calendar['calendar']->date_time->get_DB_formatted_date()."\",\"todo\");' src='" . vtiger_imageurl('cal_event.jpg', $theme). "' border='0'>";
+			$element['action'] = '';
+		$assignedto = $adb->query_result($result,$i,"user_name");
+		if(!empty($assignedto))
+			$element['assignedto'] = $assignedto;
+		else
+			$element['assignedto'] = $adb->query_result($result,$i,"groupname");
+		$c++;
+		$Entries[] = $element;
+	}
+	$ret_arr[0] = $Entries;
+        $ret_arr[1] = $navigation_array;
+	$cal_log->debug("Exiting getTasksList() method...");
+	return $ret_arr;
+}
+
+
+/**
+ * Fuction constructs Todos ListView depends on the view
+ * @param   array  $cal            - collection of objects and strings
+ * @param   string $check          - string 'listcnt' or empty. if empty means get Todos ListView else get total no. of Todos and no. of pending todos Info.
+ * returns  string $todo_list      - total no. of todos and no. of pending todos Info(Eg: Total Todos : 2, 1 Pending).
+ */
+function getTasksListView($cal, $check='',$subtab='')
+{
+	global $cal_log,$theme;
+	$list_view = "";
+        $cal_log->debug("Entering getTasksListView() method...");
+	if($cal['calendar']->view == 'day') {
+		$start_date = $end_date = $cal['calendar']->date_time->get_DB_formatted_date();
+	} elseif ($cal['calendar']->view == 'week') {
+		$start_date = $cal['calendar']->slices[0];
+		$end_date = $cal['calendar']->slices[6];
+		$start_date = DateTimeField::convertToDBFormat($start_date);
+		$end_date = DateTimeField::convertToDBFormat($end_date);
+	} elseif ($cal['calendar']->view == 'month') {
+		$start_date = $cal['calendar']->date_time->getThismonthDaysbyIndex(0);
+		$end_date = $cal['calendar']->date_time->getThismonthDaysbyIndex($cal['calendar']->
+				date_time->daysinmonth - 1);
+		$start_date = $start_date->get_DB_formatted_date();
+		$end_date = $end_date->get_DB_formatted_date();
+	} elseif ($cal['calendar']->view == 'year') {
+		$start_date = $cal['calendar']->date_time->getThisyearMonthsbyIndex(0);
+		$end_date = $cal['calendar']->date_time->get_first_day_of_changed_year('increment');
+		$start_date = $start_date->get_DB_formatted_date();
+		$end_date = $end_date->get_DB_formatted_date();
+	} else {
+		die("view:" . $cal['calendar']->view . " is not defined");
+	}
+	//if $check value is empty means get Todos list in array format else get the count of total todos and pending todos in array format.
+	if($check != '')
+	{
+		$todo_list = getTasksList($cal, $start_date, $end_date,$check);
+		$cal_log->debug("Exiting getTasksListView() method...");
+		return $todo_list;
+	}
+	else
+	{
+		$ret_arr = getTasksList($cal, $start_date, $end_date,$check);
+		$todo_list = $ret_arr[0];
+		$navigation_arr = $ret_arr[1];
+	}
+	$cal_log->debug("Exiting getTasksListView() method...");
+	$list_view .="<div id='mnuTab2' style='background-color: rgb(255, 255, 215); display:block;'>";
+	//To get Todos listView
+	$list_view .= constructTodoListView($todo_list,$cal,$subtab,$navigation_arr);
+	$list_view .="</div></div></td></tr></table></td></tr></table>
+		</td></tr></table>
+		</td></tr></table>
+		</td></tr></table>
+		</div>
+		</td>
+		<td valign=top><img src='".vtiger_imageurl('showPanelTopRight.gif', $theme)."'></td>
+	</tr>
+	</table>
+
+	";
+	echo $list_view;
+}
+
+function getTaskInfo(& $cal, $mode)
+{
+        global $mod_strings,$cal_log;
+        $cal_log->debug("Entering getTaskInfo() method...");
+        $todo = Array();
+        $todo['todo'] = getTasksListView($cal, $mode);
+        $todo_info = "";
+        $todo_info .=$mod_strings['LBL_TOTALTODOS']."&nbsp;".$todo['todo']['totaltodo'];
+        if($todo['todo']['pendingtodo'] != null)
+                $todo_info .= ", ".$todo['todo']['pendingtodo']."&nbsp;".$mod_strings['LBL_PENDING'];
+        $cal_log->debug("Exiting getTaskInfo() method...");
+
+        return $todo_info;
+}
+//----------------------------------------------------------------------------------------------------------------------
+ 
 ?>

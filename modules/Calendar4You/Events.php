@@ -109,6 +109,10 @@ if (isset($_REQUEST["end"]) && $_REQUEST["end"] != "") $end_time = $_REQUEST["en
 $start_date = date("Y-m-d",$start_time);
 $end_date = date("Y-m-d",$end_time);
 
+//MSL-----
+$PTasks_empty = "--none--";
+$PTasks_finished="100%";
+//----------
 $Event_Status = array();
 if (count($Load_Event_Status) > 0) {
     foreach ($Load_Event_Status AS $sid) {
@@ -177,7 +181,46 @@ foreach($Users_Ids AS $userid) {
         }
         
         $list_result = $adb->pquery($list_query, $list_array);
-        
+		
+        //MSL
+        if ($activitytypeid == "projects") {
+        	$list_array = array();
+        	$userNameSql = getSqlForNameInDisplayFormat(array('first_name'=>
+							'vtiger_users.first_name', 'last_name' => 'vtiger_users.last_name'), 'Users');
+        	$list_query = "SELECT vtiger_groups.groupname, $userNameSql  as user_name, vtiger_crmentity.crmid, crm2.setype, concat(vtiger_project.projectname, '--', vtiger_projecttask.projecttaskname, ' [', projecttaskprogress, ']' ) as subject, 'Public' as visibility,vtiger_projecttask.startdate as date_start, vtiger_projecttask.enddate as due_date, '00:00' as time_start, '23:00' as time_end
+				FROM vtiger_projecttask 
+				INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_projecttask.projecttaskid 
+				INNER JOIN vtiger_project ON vtiger_project.projectid = vtiger_projecttask.projectid
+				INNER JOIN vtiger_crmentity crm2 ON crm2.crmid = vtiger_project.linktoaccountscontacts 
+				LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid 
+				LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.smownerid ";
+			$list_query .= "WHERE vtiger_crmentity.deleted = 0 ";
+
+			$list_query = $list_query." AND vtiger_crmentity.smownerid = "  . $current_user->id;
+			if ($record != "") {
+	            $list_query .= " AND vtiger_crmentity.crmid = '".$record."'";
+	        } else {
+	            $list_query .= " AND CAST(vtiger_projecttask.startdate AS DATETIME) <= '".$end_date."'";
+	            $list_query .= " AND CAST(vtiger_projecttask.startdate AS DATETIME) >= '".$start_date."'";
+	        }
+	        if (count($Load_Event_Status) > 0) {
+			    foreach ($Load_Event_Status AS $sid) {
+			        if ($sid == 1) { //Not started
+			        	$list_query .= " AND (projecttaskprogress = '$PTasks_empty' )";						
+						
+					}
+					if ($sid == 3) { //completed
+			        	$list_query .= " AND (projecttaskprogress = '$PTasks_finished' )";						
+					}
+					if ($sid == 2) { //in progress
+			        	$list_query .= " AND (projecttaskprogress not in ('$PTasks_finished','$PTasks_empty') )";						
+					}
+			    }
+			}
+	        
+	        $list_result = $adb->pquery($list_query, $list_array);
+        }
+        //-------------
         while($row = $adb->fetchByAssoc($list_result)) {
             $visibility = "private";
             $editable = false;
