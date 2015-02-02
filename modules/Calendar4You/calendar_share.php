@@ -241,10 +241,13 @@ $Calendar_Settings = $Calendar4You->getSettings();
                 echo $mod_strings["LBL_CONNECTING_WORK_CORRECT"];
             }
             
-            $google_login = $GoogleSync4You->getLogin();
+            $google_login = $GoogleSync4You->getclientsecret();
             $google_apikey= $GoogleSync4You->getAPI();
             $google_keyfile = $GoogleSync4You->getkeyfile();
             $google_clientid = $GoogleSync4You->getclientid();
+            $google_refresh = $GoogleSync4You->getrefreshtoken();
+            $googleinsert = $GoogleSync4You->getgoogleinsert();
+            if($googleinsert==1) $checked='checked';
             ?>
             </div><br>
             <?php 
@@ -252,7 +255,7 @@ $Calendar_Settings = $Calendar4You->getSettings();
             if ($google_login != "") 
             { 
                 echo "<div id='google_account_info_div'>";
-                echo getTranslatedString("LBL_LOGIN","Users").":"; 
+                echo getTranslatedString("LBL_GOOGLECLIENTSECRET","Calendar4You").":"; 
                 echo $google_login; 
                 echo '&nbsp;<input title="'.$mod_strings["LBL_SET_ACCESS_DATA"].'" class="crmButton password small" language="javascript" onclick="changeGoogleAccount();" name="change_google_user" value="'.$mod_strings["LBL_CHANGE_GOOGLE_ACCOUNT"].'" type="button">';
                 echo "</div>";
@@ -267,9 +270,9 @@ $Calendar_Settings = $Calendar4You->getSettings();
                 $update_google_account = 1;
             }
             echo '<table border=0 cellspacing=0 cellpadding=2><tr><td>';
-            echo getTranslatedString("LBL_LOGIN","Users").":";
+            echo getTranslatedString("LBL_GOOGLECLIENTSECRET","Calendar4You").":";
             echo '</td><td>';
-            echo '<input type="text" name="google_login" id="google_login" value="'.$google_login.'" class="small"><br />';
+            echo '<input type="hidden" name="google_refresh" id="google_refresh" value="'.$google_refresh.'" class="small"><input type="text" name="google_login" id="google_login" value="'.$google_login.'" class="small"><br />';
             echo '</td><tr>';
             echo '<tr><td>';
             echo getTranslatedString("LBL_GOOGLEAPIKEY","Calendar4You").": ";
@@ -284,9 +287,16 @@ $Calendar_Settings = $Calendar4You->getSettings();
             echo '</td></tr>';
             echo '<tr><td>';
             echo '<tr><td>';
-            echo getTranslatedString("LBL_GOOGLEKEYFILE","Calendar4You").": ";
+            echo getTranslatedString("LBL_GOOGLEURI","Calendar4You").": ";
             echo '</td><td>';
             echo '<input type="text" name="google_keyfile" id="google_keyfile" value="'.$google_keyfile.'" class="small">';
+            echo '</td></tr>';
+            echo '<tr><td>';
+            echo '<tr><td>';
+            echo '<tr><td>';
+            echo getTranslatedString("LBL_GOOGLEINS","Calendar4You").' ';
+            echo '</td><td>';
+            echo '<input type="checkbox" name="googleinsert" id="googleinsert" '.$checked.' value="'.$googleinsert.'" class="small" >';
             echo '</td></tr>';
             echo '<tr><td>';
             /*
@@ -319,12 +329,6 @@ $Calendar_Settings = $Calendar4You->getSettings();
 	</table>
 </form>
 <?php
-//upload google file
         echo'</div><hr size="1" color="black">';
-            echo '<br><div>';
-            echo "<form method='post' action='index.php?module=Calendar4You&action=uploadfile' enctype='multipart/form-data'>";
-            echo $mod_strings['LBL_GOOGLEFILE'];
-            echo "<input type='file' name='user_file' class='small'/>    
-            <input type='submit' name='sub' class='crmbutton edit small' value='".$mod_strings["LBL_UPLOADFILE"]."' />
-            </form><br>";
+
  ?>

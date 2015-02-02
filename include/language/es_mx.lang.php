@@ -173,7 +173,7 @@ $app_strings = array (
       'NTC_DATE_FORMAT' => '(aaaa-mm-dd)',
       'NTC_TIME_FORMAT' => '(24:00)',
       'NTC_DATE_TIME_FORMAT' => '(aaaa-mm-dd 24:00)',
-      'NTC_DELETE_CONFIRMATION' => '¿Está seguro que desea eliminar este expediente?',
+      'NTC_DELETE_CONFIRMATION' => '¿Está seguro que desea eliminar este registro?',
       'NTC_ACCOUNT_DELETE_CONFIRMATION' => 'Borrar esta cuenta eliminará sus relaciones con Oportunidades, Cotizaciones, Pedidos y Facturas. ¿Quiere Borrar la Cuenta?',
       'NTC_VENDOR_DELETE_CONFIRMATION' => 'Borrar este proveedor eliminará sus relaciones con Oportunidades, Cotizaciones, Pedidos y Facturas. ¿Quiere Borrar el Proveedor?',
       'ERR_DELETE_RECORD' => ' Debe especificar un registro para poder eliminar el contacto.',
@@ -1277,6 +1277,8 @@ $app_strings = array (
 	'ERROR_GETTING_FILTER' => 'ERROR Aplicando Filtro. Por favor elimínalo y crealo de nuevo.',
 	'Upload Images' => 'Subir Imágenes',
 	'Drag file here or click to upload' => 'Arrastra la imagen aquí o haz click para cargar la imagen',
+	'SetReturnAddressTitle' => 'Dirección a Utilizar',
+	'SetReturnAddressDescription' => 'Selecciona que dirección quieres sobreescribir, si procede',
 );
 $app_list_strings = array (
       'moduleList' => array(
