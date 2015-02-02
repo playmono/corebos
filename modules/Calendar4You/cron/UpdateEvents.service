@@ -66,7 +66,7 @@ if ($num_rows1 > 0) {
                      INNER JOIN vtiger_activity 
                         ON vtiger_activity.activityid = its4you_googlesync4you_events.crmid
                         inner join its4you_googlesync4you_calendar cal on cal.userid=its4you_googlesync4you_events.userid
-                     WHERE ".$where." AND its4you_googlesync4you_events.userid = ?";
+                     WHERE ".$where." AND its4you_googlesync4you_events.userid = ? and event=eventtype";
             $result2 = $adb->pquery($sql2,array($controldate,$userid));
             
             while($row2 = $adb->fetchByAssoc($result2)) {
@@ -135,7 +135,7 @@ if ($num_rows1 > 0) {
                             $duration_hour = floor($duration_time / 3600);
                             $duration_minutes = ($duration_time - ($duration_hour * 3600 ))  / 60;
                              	
-                            $focus->column_fields['duration_hours'] = $duration_hours;
+                            $focus->column_fields['duration_hours'] = $duration_hour;
                             $focus->column_fields['duration_minutes'] = $duration_minutes;
                         }
                         
