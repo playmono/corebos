@@ -1281,7 +1281,7 @@ $mod_strings = Array(
 'FieldsTranslated' => 'Fields Translated',
 'FieldsNotTranslated' => 'Fields Not Translated',
 'LBL_VTABLE'=>'Table:',
-'LBL_COL_NAME'=>'Field name:'
+'LBL_COL_NAME'=>'Field name:',
 // language translation strings
 'SendEmailFrom' => 'Send Email From',
 'LeaveEmptyForUserEmail' => 'Leave empty to use your user email',
