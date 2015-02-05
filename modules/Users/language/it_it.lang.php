@@ -800,7 +800,14 @@
 'Language'=>'Lingua',
 'Secondary Email'=>'Mail Secondaria',
 'Time Zone'=>'Fuso Orario',
-
+'PASSWORD REQUIREMENTS' => 'Requisiti Password',
+'REQUIRED' => 'Obbligatori',
+'Min. 8 characters' => 'Minimo 8 caratteri',
+'Contains3of4' => 'LA PASSWORD CONTIENE ALMENO UNO DI QUESTI 3 GRUPPI DI CARATTERI',
+'Min. 1 uppercase' => 'Minimo una lettera maiuscola',
+'Min. 1 lowercase' => 'Minimo una lettera minuscola',
+'Min. 1 number' => 'Minimo un numero',
+'Min. 1 special character' => 'Minimo un carattere speciale ! ? , ; - @ #',
 );
 
 ?>
