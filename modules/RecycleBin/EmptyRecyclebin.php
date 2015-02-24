@@ -9,16 +9,32 @@
  **
  *********************************************************************************/
 
-global $adb;
+require_once('RecycleBinUtils.php');
 
-$adb->query('DELETE FROM vtiger_crmentity WHERE deleted = 1');
-//TODO Related records for the module records deleted from vtiger_crmentity has to be deleted. 
-//It needs lookup in the related tables and needs to be removed if doesn't have a reference record in vtiger_crmentity
- 
-$adb->query('DELETE FROM vtiger_relatedlists_rb');
+global $adb,$log;
+$allrec=vtlib_purify($_REQUEST['allrec']);
+$idlist=vtlib_purify($_REQUEST['idlist']);
+$excludedRecords=vtlib_purify($_REQUEST['excludedRecords']);
+$selected_module = vtlib_purify($_REQUEST['selectmodule']);
+$idlists = getSelectedRecordIds($_REQUEST,$selected_module,$idlist,$excludedRecords);
 
-$parenttab = getParentTab();
-
-header("Location: index.php?module=RecycleBin&action=RecycleBinAjax&file=index&parenttab=$parenttab&mode=ajax");
+$id=array();
+for($i=0;$i<count($idlists)-1;$i++) {
+	$id[]=$idlists[$i];
+}
+require_once('data/CRMEntity.php');
+$focus = CRMEntity::getInstance($selected_module);
+if($allrec==1){
+	$delcrm=$adb->pquery("DELETE FROM vtiger_crmentity WHERE deleted = 1 and setype=?",array($selected_module));
+	$delrel = $adb->pquery("DELETE FROM vtiger_relatedlists_rb WHERE entityid in (".implode(',', $id).")",array());
+		
+	
+}else{
+	if(count($id)>0) {
+		$delselcrm=$adb->pquery("DELETE FROM vtiger_crmentity WHERE deleted = 1 and crmid in (".implode(',', $id).")",array());
+		$delselrel = $adb->pquery("DELETE FROM vtiger_relatedlists_rb WHERE entityid in (".implode(',', $id).")",array());
+	}
+}
+header("Location: index.php?module=RecycleBin&action=RecycleBinAjax&file=index&parenttab=$parenttab&mode=ajax&selected_module=$selected_module");
 ?>
 
