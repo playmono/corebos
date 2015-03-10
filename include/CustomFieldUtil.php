@@ -254,10 +254,9 @@ function getFldTypeandLengthValue($label,$typeofdata)
 	return $fieldtype;
 }
 
-function getCalendarCustomFields($tabid,$mode='edit',$col_fields='') {
+function getCalendarCustomFields($tabid,$mode='edit',$col_fields='',$isduplicate) {
 	global $adb, $log, $current_user;
-	$log->debug("Entering getCalendarCustomFields($tabid, $mode, $col_fields)");
-	
+	$log->debug("Entering getCalendarCustomFields($tabid, $mode, $col_fields,$isduplicate)");
 	require('user_privileges/user_privileges_'.$current_user->id.'.php');
 	
 	$block = getBlockId($tabid,"LBL_CUSTOM_INFORMATION");
@@ -283,6 +282,7 @@ function getCalendarCustomFields($tabid,$mode='edit',$col_fields='') {
 	
 	$custFldArray = Array();
 	$noofrows = $adb->num_rows($custresult);
+	$calmode=vtlib_purify($_REQUEST['action']);
 	for($i=0; $i<$noofrows; $i++)
 	{
 		$fieldname=$adb->query_result($custresult,$i,"fieldname");
@@ -293,13 +293,12 @@ function getCalendarCustomFields($tabid,$mode='edit',$col_fields='') {
 		$generatedtype = $adb->query_result($custresult,$i,"generatedtype");
 		$typeofdata = $adb->query_result($custresult,$i,"typeofdata");
 		$defaultvalue = $adb->query_result($custresult,$i,"defaultvalue");
-		if(empty($col_fields[$fieldname])) {
-			$col_fields[$fieldname] = $defaultvalue;
+		if(empty($col_fields[$fieldname]) && $mode != 'detail_view' && !$isduplicate && $calmode != 'EventEditView' && $calmode != 'EditView') {
+			 	$col_fields[$fieldname] = $defaultvalue;
 		}
-
-		if ($mode == 'edit')
+		if ($mode == 'edit'){
 			$custfld = getOutputHtml($uitype, $fieldname, $fieldlabel, $maxlength, $col_fields,$generatedtype,'Calendar',$mode, $typeofdata);
-		if ($mode == 'detail_view')
+		}if ($mode == 'detail_view')
 			$custfld = getDetailViewOutputHtml($uitype, $fieldname, $fieldlabel, $col_fields,$generatedtype,$tabid);
 		$custFldArray[] = $custfld;		
 	}

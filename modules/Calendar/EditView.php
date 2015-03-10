@@ -140,6 +140,7 @@ if(isset($_REQUEST['record']) && $_REQUEST['record']!='') {
 		$account_name = $vndinfo[$account_id];
 	}  //--- MSL
 }
+$isduplicate=vtlib_purify($_REQUEST['isDuplicate']);
 if(isset($_REQUEST['isDuplicate']) && $_REQUEST['isDuplicate'] == 'true') {
 	$focus->id = "";
     	$focus->mode = '';
@@ -292,9 +293,9 @@ $smarty->assign("CHECK", $check_button);
 $smarty->assign("DUPLICATE",vtlib_purify($_REQUEST['isDuplicate']));
 
 if ($activity_mode == 'Task') {
-	$custom_fields_data = getCalendarCustomFields(getTabid('Calendar'),'edit',$focus->column_fields);
+	$custom_fields_data = getCalendarCustomFields(getTabid('Calendar'),'edit',$focus->column_fields,$isduplicate);
 } else {
-	$custom_fields_data = getCalendarCustomFields(getTabid('Events'),'edit',$focus->column_fields);
+	$custom_fields_data = getCalendarCustomFields(getTabid('Events'),'edit',$focus->column_fields,$isduplicate);
 }
 $smarty->assign("CUSTOM_FIELDS_DATA", $custom_fields_data);
 

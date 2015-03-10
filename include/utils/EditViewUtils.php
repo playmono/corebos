@@ -1985,10 +1985,11 @@ function getNoOfAssocProducts($module,$focus,$seid='')
 * Return type is an object array
 */
 
-function getBlockInformation($module, $result, $col_fields,$tabid,$block_label,$mode)
+function getBlockInformation($module, $result, $col_fields,$tabid,$block_label,$mode,$isduplicate)
 {
-	global $log;
+	global $log,$isduplicate;
 	$log->debug("Entering getBlockInformation(".$module.",". $result.",". $col_fields.",".$tabid.",".$block_label.") method ...");
+	
 	global $adb;
 	$editview_arr = Array();
 
@@ -2018,7 +2019,7 @@ function getBlockInformation($module, $result, $col_fields,$tabid,$block_label,$
 		$generatedtype = $adb->query_result($result,$i,"generatedtype");
 		$typeofdata = $adb->query_result($result,$i,"typeofdata");
 		$defaultvalue = $adb->query_result($result,$i,"defaultvalue");
-		if($mode == '' && empty($col_fields[$fieldname])) {
+		if($mode == '' && empty($col_fields[$fieldname]) && !$isduplicate) {
 			$col_fields[$fieldname] = $defaultvalue;
 		}
 
