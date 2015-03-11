@@ -157,7 +157,7 @@ Calendar_Event_Types = {literal}{
          }
 
 jQuery(document).ready(function(){
-		
+	var docwidth =jQuery(window).width();
 	var lastView;
     var date = new Date();
 	var d = date.getDate();
@@ -274,16 +274,19 @@ jQuery(document).ready(function(){
         },
 
         eventClick: function(calEvent, jsEvent, view){
-            
             if (calEvent.visibility == "public"){
                 jQuery(this).css('cursor', 'pointer');
                 var view_val = jQuery('#calendar_div').fullCalendar('getView');
-      
                 jQuery('#event_info').css('display', 'block');
                 jQuery('#event_info').css('top', jsEvent.pageY + 1);
-                jQuery('#event_info').css('left', jsEvent.pageX + 1);
+                if(docwidth-jsEvent.pageX>=70 && docwidth-jsEvent.pageX<=185 ){
+                	jQuery('#event_info').css('right', docwidth-jsEvent.pageX);
+                }
+                else{
+                	jQuery('#event_info').css('left', jsEvent.pageX + 1);
+                }
                 jQuery('#event_info_content').html('<img src=\'themes/images/vtbusy.gif\'>');
-
+				
                 if (calEvent.id.substr(0,1) == "g"){
                     jQuery.ajax({
                                     url: 'index.php',
@@ -299,6 +302,7 @@ jQuery(document).ready(function(){
                                     },
                                     success: function(response) {
                                         jQuery('#event_info_content').html(response);
+                                        
                                     }
                                 });
                 } else {
