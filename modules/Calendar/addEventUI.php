@@ -737,8 +737,22 @@ list($startHour, $startMin) = explode(':', $date->getDisplayTime());
 		</tr>
 	</table>
 </div>
-
+<div id="addModules"  class="calAddEvent" style="width: 100px;display: none;" onmouseover="fnShowModules();" onmouseout="fnRemoveModules();">
+								
+									<table width="100%" cellpadding="0" cellspacing="0" border="0" id="createTask">
+										<?php 
+										$tasklabel=array('Quotes','SalesOrder','PurchaseOrder','Invoice','Project','ProjectTask','ProjectMilestone','Potentials');
+										for($i=0;$i<count($tasklabel);$i++){ ?> 
+											
+											<tr><td><a href='' class='drop_down' id="add<?php echo strtolower($tasklabel[$i]);?>"><?php echo getTranslatedString($tasklabel[$i]);?></a> 
+											
+											</td></tr>
+											
+											<?php } ?>
+									</table>
+</div>
 <!-- Dropdown for Add Event -->
+<?php if(vtlib_purify($_REQUEST['subtab']) != 'task'){?>
 <div id='addEventDropDown' style='width:160px' onmouseover='fnShowEvent()' onmouseout='fnRemoveEvent()'>
 <table width="100%" cellpadding="0" cellspacing="0" border="0">
 <?php
@@ -777,6 +791,7 @@ list($startHour, $startMin) = explode(':', $date->getDisplayTime());
 	<tr><td><a href='' id="addtodo" class='drop_down'><?php echo $mod_strings['LBL_ADDTODO']?></a></td></tr>
 </table>
 </div>
+<?php } ?>
 <div class="calAddEvent layerPopup" style="display:none;width:700px;left:200px;" id="createTodo" align=center>
 <form name="createTodo" onSubmit="task_check_form();if(formValidate()) { VtigerJS_DialogBox.block(); } else { return false; }" method="POST" action="index.php">
 <input type="hidden" name="return_action" value="index">
@@ -1107,6 +1122,7 @@ list($startHour, $startMin) = explode(':', $date->getDisplayTime());
                 </tr>
         </table>
 </div>
+
 <script>
 	//for move addEventUI
 	var theEventHandle = document.getElementById("moveEvent");

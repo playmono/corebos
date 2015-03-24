@@ -21,6 +21,7 @@
  ********************************************************************************/
 
 $mod_strings = Array(
+'LBL_SELECT_MODULE'=>'Select Module',
 'LBL_MODULE_NAME'=>'Calendar',
 'LBL_MODULE_TITLE'=>'Calendar: Home',
 'LBL_MODULE_APPOINTMENT'=>'Calendar: Appointment',

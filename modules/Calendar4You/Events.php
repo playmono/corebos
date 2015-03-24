@@ -41,6 +41,7 @@ if ($_REQUEST["usersids"] != "") {
 
 $Load_Event_Status = array();
 $event_status = $_REQUEST["event_status"];
+
 if ($event_status != "") { 
     $Load_Event_Status = explode(",",$event_status);
 }
@@ -54,10 +55,10 @@ if ($task_status != "") {
 $Calendar4You = new Calendar4You();
 $Calendar4You->GetDefPermission($current_user->id);
 
-if ($record == "" && $save != "") $Calendar4You->SaveView($Type_Ids, $Users_Ids, $all_users, $Load_Event_Status, $Load_Task_Status);
-
+if ($record == "" && $save != "") {
+	$Calendar4You->SaveView($Type_Ids, $Users_Ids, $all_users, $Load_Event_Status, $Load_Task_Status);
+}
 $detailview_permissions = $Calendar4You->CheckPermissions("DETAIL");
-
 require('user_privileges/user_privileges_'.$current_user->id.'.php');
 require('user_privileges/sharing_privileges_'.$current_user->id.'.php');
 
@@ -108,7 +109,11 @@ if (isset($_REQUEST["end"]) && $_REQUEST["end"] != "") $end_time = $_REQUEST["en
 
 $start_date = date("Y-m-d",$start_time);
 $end_date = date("Y-m-d",$end_time);
-
+//MSL-----
+$tasklabel=array('Quotes','SalesOrder','PurchaseOrder','Invoice','Project','ProjectTask','ProjectMilestone','Potentials');
+$PTasks_empty = "--none--";
+$PTasks_finished="100%";
+//----------
 $Event_Status = array();
 if (count($Load_Event_Status) > 0) {
     foreach ($Load_Event_Status AS $sid) {
@@ -177,7 +182,104 @@ foreach($Users_Ids AS $userid) {
         }
         
         $list_result = $adb->pquery($list_query, $list_array);
+		
         
+        if (in_array($activitytypeid,$tasklabel)) {
+        	include_once('modules/'.$activitytypeid.'/'.$activitytypeid.'.php');
+			$mod =new $activitytypeid;
+			$subject = $mod->list_link_field;
+			$tablename = $mod->table_name;
+        	$list_array = array();
+			
+			$userNameSql = getSqlForNameInDisplayFormat(array('first_name'=>
+							'vtiger_users.first_name', 'last_name' => 'vtiger_users.last_name'), 'Users');
+			$queryGenerator = getListQuery($activitytypeid);
+			$list_query = substr($queryGenerator,0,stripos($queryGenerator,'Select')+6)." vtiger_groups.groupname, $userNameSql as user_name, ".substr($queryGenerator,stripos($queryGenerator,'Select')+6); 
+			$list_query1 = substr($list_query,0,stripos($list_query,'where')+5);
+			$list_query2 = substr($list_query,stripos($list_query,'WHERE')+5);
+			if ($record != "") {
+	            $list_query .= " AND vtiger_crmentity.crmid = '".$record."'";
+	        }
+			
+			else{
+			if($activitytypeid == 'Quotes'){
+			$list_query =$list_query1." (CAST(vtiger_crmentity.createdtime AS DATETIME) >= '".$start_date."' AND CAST(vtiger_crmentity.createdtime AS DATETIME) <= '".$end_date."')
+						     AND CAST(vtiger_quotes.validtill AS DATETIME) <= '".$end_date."' AND ".$list_query2;
+			}
+			if($activitytypeid == 'Potentials')
+			$list_query =$list_query1." ((CAST(vtiger_crmentity.createdtime AS DATETIME) >= '".$start_date."' AND CAST(vtiger_crmentity.createdtime AS DATETIME) <= '".$end_date."')
+						      OR (CAST(".$tablename.".closingdate AS DATETIME) >= '".$start_date."' AND CAST(".$tablename.".closingdate AS DATETIME) <= '".$end_date."')	
+								) AND ".$list_query2;
+			if($activitytypeid == 'Invoice')
+			$list_query =$list_query1." ((CAST(".$tablename.".invoicedate AS DATETIME) >= '".$start_date."' AND CAST(".$tablename.".invoicedate AS DATETIME) <= '".$end_date."')
+						      OR (CAST(".$tablename.".duedate AS DATETIME) >= '".$start_date."' AND CAST(".$tablename.".duedate AS DATETIME) <= '".$end_date."')	
+								) AND ".$list_query2;
+			if($activitytypeid == 'SalesOrder' || $activitytypeid == 'PurchaseOrder'){
+			$list_query =$list_query1." CAST(vtiger_crmentity.createdtime AS DATETIME) >= '".$start_date."' AND CAST(vtiger_crmentity.createdtime AS DATETIME) <= '".$end_date."' AND ".$list_query2;
+			}
+			if($activitytypeid == 'Project'){
+			$list_query =$list_query1." ((CAST(".$tablename.".startdate AS DATETIME) >= '".$start_date."') AND (CAST(".$tablename.".startdate AS DATETIME) <= '".$end_date."')) OR ".$list_query2;
+			if (count($Load_Event_Status) > 0) {
+			    foreach ($Load_Event_Status AS $sid) {
+			        if ($sid == 1) { //Not started
+			        	$list_query .= " AND (projectprogress = '$PTasks_empty' )";						
+						
+					}
+					if ($sid == 3) { //completed
+			        	$list_query .= " AND (projectprogress = '$PTasks_finished' )";						
+					}
+					if ($sid == 2) { //in progress
+			        	$list_query .= " AND (projectprogress not in ('$PTasks_finished','$PTasks_empty') )";						
+					}
+			    }
+			}
+			}
+			if($activitytypeid == 'ProjectMilestone')
+			$list_query =$list_query1." ((CAST(vtiger_crmentity.createdtime AS DATETIME) >= '".$start_date."' AND CAST(vtiger_crmentity.createdtime AS DATETIME) <= '".$end_date."')
+						      OR (CAST(".$tablename.".projectmilestonedate AS DATETIME) >= '".$start_date."' AND CAST(".$tablename.".projectmilestonedate AS DATETIME) <= '".$end_date."')	
+								) AND ".$list_query2;
+			}
+
+			$list_result = $adb->pquery($list_query, $list_array);
+			if($activitytypeid == 'ProjectTask'){
+        	$userNameSql = getSqlForNameInDisplayFormat(array('first_name'=>
+							'vtiger_users.first_name', 'last_name' => 'vtiger_users.last_name'), 'Users');
+        	$list_query = "SELECT vtiger_groups.groupname, $userNameSql  as user_name, vtiger_crmentity.crmid, crm2.setype, concat(vtiger_project.projectname, '--', vtiger_projecttask.projecttaskname, ' [', projecttaskprogress, ']' ) as subject, 'Public' as visibility,vtiger_projecttask.startdate as date_start, vtiger_projecttask.enddate as due_date, '00:00' as time_start, '23:00' as time_end
+				FROM vtiger_projecttask 
+				INNER JOIN vtiger_crmentity ON vtiger_crmentity.crmid = vtiger_projecttask.projecttaskid 
+				INNER JOIN vtiger_project ON vtiger_project.projectid = vtiger_projecttask.projectid
+				INNER JOIN vtiger_crmentity crm2 ON crm2.crmid = vtiger_project.linktoaccountscontacts 
+				LEFT JOIN vtiger_groups ON vtiger_groups.groupid = vtiger_crmentity.smownerid 
+				LEFT JOIN vtiger_users ON vtiger_users.id = vtiger_crmentity.smownerid ";
+			$list_query .= "WHERE vtiger_crmentity.deleted = 0 ";
+
+			$list_query = $list_query." AND vtiger_crmentity.smownerid = "  . $current_user->id;
+			if ($record != "") {
+	            $list_query .= " AND vtiger_crmentity.crmid = '".$record."'";
+	        } else {
+	            $list_query .= " AND CAST(vtiger_projecttask.enddate AS DATETIME) <= '".$end_date."'";
+	            $list_query .= " AND CAST(vtiger_projecttask.enddate AS DATETIME) >= '".$start_date."'";
+	            //$list_query .= " OR (CAST(vtiger_projecttask.startdate AS DATETIME) <= '".$end_date."' AND CAST(vtiger_projecttask.startdate AS DATETIME) >= '".$start_date."')";
+	            
+	        }
+	        if (count($Load_Event_Status) > 0) {
+			    foreach ($Load_Event_Status AS $sid) {
+			        if ($sid == 1) { //Not started
+			        	$list_query .= " AND (projecttaskprogress = '$PTasks_empty' )";						
+						
+					}
+					if ($sid == 3) { //completed
+			        	$list_query .= " AND (projecttaskprogress = '$PTasks_finished' )";						
+					}
+					if ($sid == 2) { //in progress
+			        	$list_query .= " AND (projecttaskprogress not in ('$PTasks_finished','$PTasks_empty') )";						
+					}
+			    }
+			}
+	        $list_result = $adb->pquery($list_query, $list_array);
+	        }
+        }
+        //-------------
         while($row = $adb->fetchByAssoc($list_result)) {
             $visibility = "private";
             $editable = false;
@@ -186,11 +288,16 @@ foreach($Users_Ids AS $userid) {
             $event = $activitytypeid;
             
             $into_title = $row["subject"];
-            if ($detailview_permissions) {
+			if($row["setype"] == 'Project') $into_title = $row["projectname"];
+			if($row["setype"] == 'ProjectMilestone') $into_title = $row["projectmilestonename"];
+			if($row["potentialname"]) $into_title = $row["potentialname"];
+			
+            if (in_array($activitytypeid,$tasklabel)){
+            	$activity_mode = "Task";
+				 if ($detailview_permissions) {
                 if (($Calendar4You->view_all && $Calendar4You->edit_all) || ($userid == $current_user->id || $row["visibility"] == "Public" || in_array($userid,$ParentUsers) || $activitytypeid == "invite")) {
                     if (isset($Showed_Field[$event]))
                         $into_title = transferForAddIntoTitle(1,$row,$Showed_Field[$event]);
-                    
                     $add_more_info = true;
                     $visibility = "public"; 
                 }
@@ -199,18 +306,24 @@ foreach($Users_Ids AS $userid) {
                     $editable = true; 
                 }
             }
-            if ($activitytypeid == "task")
-            	$activity_mode = "Task";
+				
+				
+				
+				
+			}
             else
            	$activity_mode = "Events";
             
             if ($record != "") {
                 $Actions = array();
-                if ($visibility == "public") {
-                    $Actions[] = "<a target='_new' href='index.php?action=EventDetailView&module=Calendar4You&record=".$record."&activity_mode=$activity_mode&parenttab=Tools'>".$mod['LBL_DETAIL']."</a>";
-                }
+                if ($visibility == "public" && $activity_mode != 'Task') {
+                    	$Actions[] = "<a target='_new' href='index.php?action=EventDetailView&module=Calendar4You&record=".$record."&activity_mode=$activity_mode&parenttab=Tools'>".$mod['LBL_DETAIL']."</a>";
+				}
 
                 if($Calendar4You->CheckPermissions("EDIT",$record)) {
+                	if($activity_mode === 'Task')
+					$Actions[] = "<a target='_new' href='index.php?action=EditView&module=".$activitytypeid."&record=".$record."'>".$app['LNK_EDIT']."</a>";
+					else
                     $Actions[] = "<a target='_new' href='index.php?action=EventEditView&module=Calendar4You&record=".$record."&activity_mode=$activity_mode&parenttab=Tools'>".$app['LNK_EDIT']."</a>";
                 }
                 if (vtlib_isModuleActive('Timecontrol')) {
@@ -224,7 +337,8 @@ foreach($Users_Ids AS $userid) {
                 
                 $into_title = $app['LBL_ACTION'].": ".$actions."<hr>".nl2br($into_title);
             }
-            
+			
+			
             $title = "<font style='font-size:12px'>".$into_title."</font>";
             
             if ($add_more_info) {
@@ -240,7 +354,44 @@ foreach($Users_Ids AS $userid) {
             
             $convert_due_date = DateTimeField::convertToUserTimeZone($row["due_date"]." ".$row["time_end"]);
 	        $user_due_date = $convert_due_date->format('Y-m-d H:i');
-                
+            
+			if(in_array($activitytypeid,$tasklabel)){
+				if($activitytypeid == 'Quotes' || $activitytypeid == 'SalesOrder' || $activitytypeid == 'PurchaseOrder' || $activitytypeid == 'ProjectMilestone' || $activitytypeid == 'Potentials'){
+					$convert_date_start = DateTimeField::convertToUserTimeZone($row["createdtime"]);
+			        $user_date_start = $convert_date_start->format('Y-m-d H:i');
+				}
+				if($activitytypeid == 'Invoice'){
+					$convert_date_start = DateTimeField::convertToUserTimeZone($row["invoicedate"]);
+			        $user_date_start = $convert_date_start->format('Y-m-d H:i');
+				}
+				if($activitytypeid == 'Project'){
+					$convert_date_start = DateTimeField::convertToUserTimeZone($row["startdate"]);
+			        $user_date_start = $convert_date_start->format('Y-m-d H:i');
+				}
+				if($activitytypeid == 'Quotes'){
+					$convert_due_date = DateTimeField::convertToUserTimeZone($row["validtill"]);
+			        $user_due_date = $convert_due_date->format('Y-m-d H:i');
+				}
+				if($activitytypeid == 'Project'){
+					if($row["actualenddate"] !='')
+					$convert_due_date = DateTimeField::convertToUserTimeZone($row["actualenddate"]);
+					else $convert_due_date = DateTimeField::convertToUserTimeZone($row["targetenddate"]);
+			        $user_due_date = $convert_due_date->format('Y-m-d H:i');
+				}
+				if($activitytypeid == 'ProjectMilestone'){
+					$convert_due_date = DateTimeField::convertToUserTimeZone($row["projectmilestonedate"]);
+			        $user_due_date = $convert_due_date->format('Y-m-d H:i');
+				}
+				if($activitytypeid == 'Potentials'){
+					$convert_due_date = DateTimeField::convertToUserTimeZone($row["closingdate"]);
+			        $user_due_date = $convert_due_date->format('Y-m-d H:i');
+				}
+				if($activitytypeid == 'SalesOrder' || $activitytypeid == 'PurchaseOrder' || $activitytypeid == 'Invoice'){
+					$convert_due_date = DateTimeField::convertToUserTimeZone($row["duedate"]);
+			        $user_due_date = $convert_due_date->format('Y-m-d H:i');
+				}
+			}
+	
             $Activities[] = array('id' => $row["crmid"],
                                   'typeid' => $activitytypeid,
                                   'userid' => $userid,

@@ -91,7 +91,7 @@ function showhideRepeat(argg1,argg2)
 
 
 function gshow(argg1,type,startdate,enddate,starthr,startmin,startfmt,endhr,endmin,endfmt,viewOption,subtab)
-{
+{	
 	smin = parseInt(startmin,10);
         smin = smin - (smin%5);
 	var y=document.getElementById(argg1).style;
@@ -617,11 +617,13 @@ function fnAddEvent(obj,CurrObj,start_date,end_date,start_hr,start_min,start_fmt
 	tagName.style.left= left_Side  + 'px';
 	tagName.style.top= top_Side + 22+ 'px';
 	tagName.style.display = 'block';
+	console.log(tagName.style.left);
 	eventlist = eventlist.split(";");
 	for(var i=0;i<(eventlist.length-1);i++){
 		document.getElementById("add"+eventlist[i].toLowerCase()).href="javascript:gshow('addEvent','"+eventlist[i]+"','"+start_date+"','"+end_date+"','"+start_hr+"','"+start_min+"','"+start_fmt+"','"+end_hr+"','"+end_min+"','"+end_fmt+"','"+viewOption+"','"+subtab+"');fnRemoveEvent();";
 	}
 	document.getElementById("addtodo").href="javascript:gshow('createTodo','todo','"+start_date+"','"+end_date+"','"+start_hr+"','"+start_min+"','"+start_fmt+"','"+end_hr+"','"+end_min+"','"+end_fmt+"','"+viewOption+"','"+subtab+"');fnRemoveEvent();";
+	console.log(document.getElementById("addtodo").href);
 }
 
 function fnRemoveEvent(){
@@ -630,6 +632,27 @@ function fnRemoveEvent(){
 
 function fnShowEvent(){
 		var tagName = document.getElementById('addEventDropDown').style.display= 'block';
+}
+
+function fnAddModules(obj,CurrObj,subtab,modulelist,viewOption){
+	var tagName = document.getElementById(CurrObj);
+	var left_Side = findPosX(obj);
+	var top_Side = findPosY(obj);
+	tagName.style.left= left_Side  + 3+'px';
+	tagName.style.top= top_Side + 35+ 'px';
+	tagName.style.display = 'block';
+	modulelist = modulelist.split(";");
+	for(var i=0;i<(modulelist.length-1);i++){
+		document.getElementById("add"+modulelist[i].toLowerCase()).href="index.php?module=Calendar&action=index&return_module="+modulelist[i]+"&viewOption="+viewOption+"&subtab=task";
+	}
+}
+
+function fnRemoveModules(){
+	var tagName = document.getElementById('addModules').style.display = 'none';
+}
+
+function fnShowModules(){
+		var tagName = document.getElementById('addModules').style.display= 'block';
 }
 
 function getMiniCal(url){
@@ -819,7 +842,7 @@ function getcalAction(obj,Lay,id,view,hour,dateVal,type){
     if(pending) pending.href="javascript:updateStatus("+id+",'"+notheldstatus+"','"+view+"',"+hour+","+day+","+month+","+year+",'"+type+"')";
 
     if(postpone) postpone.href="index.php?module=Calendar&action=EditView&record="+id+"&return_action=index&activity_mode="+activity_mode+"&view="+view+"&hour="+hour+"&day="+day+"&month="+month+"&year="+year+"&viewOption="+OptionData+"&subtab="+type+"&maintab=Calendar";
-
+	
     if(actdelete) actdelete.href="javascript:delActivity("+id+",'"+view+"',"+hour+","+day+","+month+","+year+",'"+type+"')";
 
     if(changeowner) changeowner.href="javascript:dispLayer('act_changeowner');";

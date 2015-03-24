@@ -13,7 +13,8 @@ require_once("modules/Calendar/Calendar.php");
 
 global $app_strings, $mod_strings, $current_language, $currentModule, $theme, $current_user, $default_charset;
 require_once('Smarty_setup.php');
-
+$tasklabel = array('Quotes','SalesOrder','PurchaseOrder','Invoice','Project','ProjectTask','ProjectMilestone','Potentials');
+	
 $category = getParentTab($currentModule);
 
 $smarty = new vtigerCRM_Smarty();
@@ -25,7 +26,6 @@ $smarty->assign('MOD', $mod_strings);
 $Calendar4You = new Calendar4You();
 
 $Calendar4You->GetDefPermission($current_user->id);
-$Calendar4You->setgoogleaccessparams($current_user->id);
 $Ch_Views = $Calendar4You->GetView();
 
 if (count($Ch_Views) > 0) $load_ch = true; else $load_ch = false;
@@ -138,7 +138,19 @@ foreach ($ActTypes AS $act_id => $act_name) {
                                      "color"=>$Colors_Palete[1],
                                      "textColor"=>$Colors["text"],
                                      "checked"=>$event_checked);
-                                       
+//  add modules
+for($i=0;$i<count($tasklabel);$i++){
+$Modules_Colors = getEColors("type",$tasklabel[$i]);
+$Modules_Colors_Palette = $colorHarmony->Monochromatic($Modules_Colors["bg"]);
+$Activity_Types[$tasklabel[$i]] = array("typename"=>$tasklabel[$i],
+                           "act_type"=>"task",
+                           "label"=>$tasklabel[$i],
+                           "title_color"=>$Modules_Colors_Palette[$i],
+                           "color"=>$Modules_Colors_Palette[$i+1],
+                           "textColor"=>$Modules_Colors["text"],
+                           "checked"=>$invite_checked);
+//---------
+}                                   
     unset($Colors);
     unset($Colors_Palete);                                   
 }  

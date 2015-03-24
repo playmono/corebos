@@ -20,7 +20,7 @@ $viewOptions = array('listview','hourview');
 if(empty($viewBox) || !in_array($viewBox, $viewOptions)) {
 	$viewBox = 'hourview';
 }
-if($subtab != 'todo') {
+if($subtab != 'todo' && $subtab != 'task') { //MSL
 	$subtab = 'event';
 }
 $calendar_arr = Array();
@@ -83,4 +83,7 @@ if ($viewBox == 'hourview' && ($mysel == 'day' || $mysel == 'week' || $mysel == 
 }
 $calendar_arr['view'] = $mysel;
 calendar_layout($calendar_arr,$viewBox,$subtab);
+
+
+
 ?>
