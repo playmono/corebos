@@ -10,9 +10,12 @@
 
 require_once 'modules/Vtiger/EditView.php';
 
+$already_exist = vtlib_purify($_REQUEST['already_exist']);
 if($focus->mode == 'edit') {
+	$smarty->assign("ALREADYEXIST",$already_exist);
 	$smarty->display('salesEditView.tpl');
 } else {
+	$smarty->assign("ALREADYEXIST",$already_exist);
 	$smarty->display('CreateView.tpl');
 }
 

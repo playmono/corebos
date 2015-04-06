@@ -12,6 +12,7 @@ $mod_strings = Array(
 	'GlobalVariable' =>'Global Variables',
 	'SINGLE_GlobalVariable' => 'Global Variable',
 	'GlobalVariable ID' => 'Global Variable ID',
+	'LBL_MANDATORY_VALUE'=>'Only one mandatory value is allowed for a given module and variable',
 
 	'LBL_CUSTOM_INFORMATION' => 'Custom Information',
 	'LBL_GLOBAL_VARIABLE_INFORMATION'=>'Global Variable Information',

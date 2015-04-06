@@ -155,6 +155,11 @@ function AddressSync(Addform,id)
 												{/if}
 													<input title="{$APP.LBL_CANCEL_BUTTON_TITLE}" accessKey="{$APP.LBL_CANCEL_BUTTON_KEY}" class="crmbutton small cancel" onclick="window.history.back()" type="button" name="button" value="{$APP.LBL_CANCEL_BUTTON_LABEL}  " style="width:70px">
 											</div>
+											{if $MODULE eq 'GlobalVariable' && $ALREADYEXIST eq '1'}
+											<div style="border-style: solid; border-color: #c43232; border-radius: 12px; margin-top: 2%;"> 
+												<p style="margin-left: 20%;">{$MOD.LBL_MANDATORY_VALUE}</p>
+											</div>
+										{/if}
 										</td>
 									   </tr>
 
@@ -256,7 +261,6 @@ function AddressSync(Addform,id)
 <!--added to fix 4600-->
 <input name='search_url' id="search_url" type='hidden' value='{$SEARCH}'>
 </form>
-
 
 {if ($MODULE eq 'Emails' || 'Documents') and ($USE_RTE eq 'true')}
 	<script type="text/javascript" src="include/ckeditor/ckeditor.js"></script>
